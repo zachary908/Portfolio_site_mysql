@@ -1,0 +1,24 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="5">
+            <File firstVisibleLine="6" xOffset="0" scrollWidth="1" startPos="385" endPos="385" selMode="0" lang="CSS" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\styles\pokerStyle.css" />
+            <File firstVisibleLine="174" xOffset="0" scrollWidth="13195" startPos="4774" endPos="4774" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\pokerMethods.php" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="13195" startPos="54" endPos="54" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\poker.php" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="13195" startPos="190" endPos="190" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\pokerSessions.php" />
+            <File firstVisibleLine="13" xOffset="0" scrollWidth="13195" startPos="2988" endPos="1992" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\controls\pokerIntroHeader.php" />
+            <File firstVisibleLine="13" xOffset="0" scrollWidth="1183" startPos="756" endPos="756" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\controls\pokerHeader.php" />
+            <File firstVisibleLine="153" xOffset="0" scrollWidth="13195" startPos="4329" endPos="4329" selMode="0" lang="Javascript" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\scripts\pokerjs.js" />
+            <File firstVisibleLine="15" xOffset="0" scrollWidth="13195" startPos="833" endPos="833" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\pokerAddSession.php" />
+            <File firstVisibleLine="907" xOffset="0" scrollWidth="1505" startPos="13082" endPos="13082" selMode="0" lang="CSS" encoding="-1" filename="C:\Users\Zachary\Documents\web\VideoInterviewPractice\style\style.css" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="13195" startPos="216" endPos="216" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\VideoInterviewPractice\Controls\header.php" />
+            <File firstVisibleLine="541" xOffset="0" scrollWidth="3339" startPos="16895" endPos="16899" selMode="0" lang="Javascript" encoding="-1" filename="C:\Users\Zachary\Documents\web\VideoInterviewPractice\scripts\javascript.js">
+                <Mark line="91" />
+                <Mark line="365" />
+            </File>
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="13195" startPos="36546" endPos="36559" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\VideoInterviewPractice\Methods.php">
+                <Mark line="244" />
+            </File>
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

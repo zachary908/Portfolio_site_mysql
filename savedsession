@@ -1,0 +1,13 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="1">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="2226" startPos="73" endPos="73" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\controls\header.php" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="2226" startPos="0" endPos="0" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\index.php" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="2226" startPos="0" endPos="0" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\controls\workHeader.php" />
+            <File firstVisibleLine="12" xOffset="0" scrollWidth="2226" startPos="557" endPos="568" selMode="0" lang="Javascript" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\scripts\javascript.js" />
+            <File firstVisibleLine="150" xOffset="0" scrollWidth="2226" startPos="2430" endPos="2430" selMode="0" lang="CSS" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\styles\style.css" />
+            <File firstVisibleLine="14" xOffset="0" scrollWidth="2226" startPos="3478" endPos="3478" selMode="0" lang="PHP" encoding="-1" filename="C:\Users\Zachary\Documents\web\Portfolio_Site\work1.php" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

@@ -1,0 +1,307 @@
+body, html{
+	font-family: arial;
+	font-size: 16px;
+	margin: 0px;
+	background: url("../images/pokerBkgdStrip4.jpg") repeat scroll left top;
+	-webkit-backface-visibility: hidden;
+}
+
+a{
+	text-decoration: none;
+	color: black;
+}
+
+.headerBkgd{
+    background-color: #F6F6F6;
+    border-top: 5px solid black;
+    height: 90px;
+    margin: 0;
+    min-width: 1348px;
+    width: 100%;
+    z-index: -1;
+}
+
+.headerWrap{
+    height: 70px;
+    margin-top: 15px;
+}
+
+.header,
+.footer{
+    margin: auto;
+    text-align: left;
+    width: 1000px;
+}
+
+.header .left{
+    float: left;
+    height: 75px;
+	width: 200px;
+}
+
+.header .center{
+	width: 600px;
+}
+
+
+.footerBkgd{
+    background-color: #F6F6F6;
+    border-bottom: 5px solid black;
+	border-top: 1px solid #b1a8a7;
+    height: 90px;
+    margin: 0;
+    min-width: 1348px;
+    width: 100%;
+    z-index: -1;
+	box-shadow: 0px -1px 5px #cec8c8;
+}
+
+.footerWrap{
+    height: 70px;
+    margin: 15px 0px;
+	font-size: 14px;
+	color: #b1a8a7;
+}
+
+.footerFont{
+	font-size: 14px;
+	color: #b1a8a7;
+}
+
+.footerTopLeft{
+    margin-right: 15px;
+}
+
+.footerTopMiddle{
+    margin: 0 15px;
+}
+.footer .left{
+    float: left;
+    height: 75px;
+	width: 200px;
+}
+
+.navSect{
+	padding-top: 40px;
+	height: 32px;
+	width: 150px;
+	margin: 0px 25px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.navSect:hover{
+	border-bottom: 3px solid #CF0303;
+}
+
+.selected{
+	border-bottom: 3px solid #CF0303;
+}
+
+.header .right{
+    float: right;
+    height: 75px;
+    width: 200px;
+}
+
+.fright{
+	float: right;
+}
+.fleft{
+	float: left;
+}
+
+.floatingFix:after{
+	content: ".";
+	visibility: hidden;
+	display: block;
+	clear: both;
+}
+
+#fullCover, #fullCover2{
+	border: none;
+	background-color: #000000;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+	z-index: 1;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+}
+
+.modalWrap{
+	position: fixed; 
+	width: 100%; 
+	height: 100%;	
+	padding-top: 50px;
+	display: none;
+}
+
+.modalGlobal{
+	background-color: #ffffff;
+	z-index: 2;
+	position: relative;
+	margin: auto; 
+	width: 500px;
+	height: 300px;
+	display: none;
+}
+
+.modalHeaderWrap{
+	height: 70px;
+	padding-top: 20px;
+}
+
+.modalHeader{
+	font-size: 25px;
+	width: 250px;
+	margin: auto;
+	text-align: center;
+}
+
+.modalSubHead{
+	font-size: 12px;
+	text-align: center;
+	padding-top: 15px;
+}
+
+.modalRow{
+	height: 35px;
+}
+
+.modalLabelWrap{
+	width: 250px;
+	float: left;
+}
+
+.modalLabel{
+	float: right;
+	padding-right: 6px;
+}
+
+.modalBtnWrap{
+	text-align: center;
+}
+
+.modalBtn{
+	margin: 0px 10px;
+	padding: 2px 15px;
+}
+
+.filterWrap{
+	width: 100%;
+}
+
+.sumFilter{
+	width: 820px;
+	margin: auto;
+	margin-top: 40px;
+}
+
+.sessFilter{
+	width: 585px;
+	margin: auto;
+}
+
+.sumFilterLbl{
+	margin-right: 10px;
+}
+
+.sumTblGraphWrap{
+	width: 90%;
+	margin: auto;
+}
+
+.sumTblWrap{
+	width: 100%;
+	margin: auto;
+}
+
+.sumGraphWrap{
+	width: 800px;
+	margin: auto;
+}
+
+/* -------------------------------------------------------*/
+/* TABLES */
+/* -------------------------------------------------------*/
+.sumTotTbl,
+.sumAvgTbl{
+	border-collapse: true;
+	border-spacing: 0px;
+	border: 1px solid black;
+	background-color: white;
+	width: 800px;
+	margin: auto;
+}
+
+th,
+td[name=place],
+td[name=live],
+td[name=gameType],
+td[name=limit],
+td[name=ringtour],
+.centerText{
+	text-align: center;
+}
+
+th{
+    border-bottom: 1px solid gray;
+    background-color: #c6c1c1;
+    padding: 3px;
+    vertical-align: top;
+}
+
+.sumTotTbl th,
+.sumAvgTbl th{
+	width: 800px;
+}
+
+.sessionsTbl{
+	border-collapse: true;
+	border-spacing: 0px;
+	border: 1px solid black;
+	background-color: white;
+	margin: auto;
+}
+
+td[name=duration], 
+td[name=buyin],
+td[name=cashout],
+td[name=rate],
+td[name=return],
+.rightText{
+	text-align: right;
+}
+
+.hide,
+td[name=ringtour],
+td[name=live]{
+	display: none;
+}
+
+.tblLbl{
+	text-align: right;
+}
+
+.tblData{
+	text-align: left;
+	font-weight: bold;
+}
+
+.inactive{
+	display: none;
+}
+
+.active{
+	display: block;
+}
+
+.multiSelect{
+	width: 100px;
+	margin-top: -20px;
+}
+
