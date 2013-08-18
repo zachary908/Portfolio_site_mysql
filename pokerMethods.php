@@ -13,8 +13,7 @@
 		switch($methodSwitch){
 			case 'register':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -39,7 +38,7 @@
 				);
 				
 				// CALL 'REGISTER' SP
-				$stmt = sqlsrv_query($conn, '{CALL RegisterUser(?,?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL RegisterUser($Email,$Username,$Password,?)}');
 
 				if($stmt === false){
 					echo 'Data could not be entered into database.';
@@ -57,15 +56,14 @@
 					echo "That email is already registered.";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'login':
 				// $_SESSION['USER']['NAME'] AND $_SESSION['USER']['ID'] ARE SET IN THIS METHOD
 				
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -84,7 +82,12 @@
 					array($logMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL Login(?,?,?)}', $params);
+				//$stmt = mysqli_query($conn, '{CALL Login(?,?,?)}', $params);
+				
+				/*$res = mysql_query('call sp_sel_test()');
+				if ($res === FALSE) {
+					die(mysql_error());
+				}*/
 				
 				if($stmt === false){
 					echo 'Data could not be entered into database.';
@@ -95,7 +98,7 @@
 				$sql = "SELECT Id FROM Members
 						WHERE Username = '$Username'";
 				
-				$stmt = sqlsrv_query($conn, $sql);
+				$stmt = mysqli_query($conn, $sql);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -114,7 +117,7 @@
 					echo "That username is not registered.";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'logout':
@@ -123,8 +126,7 @@
 			
 			case 'getListAJAX':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -141,7 +143,7 @@
 					array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL GetList(?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL GetList(?,?,?)}', $params);
 
 				if($stmt === false){
 					echo "Data could not be retrieved from database.";
@@ -164,13 +166,12 @@
 					}
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 			
 			case 'getLocListAJAX':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -185,7 +186,7 @@
 					array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL GetLocList(?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL GetLocList(?,?)}', $params);
 
 				if($stmt === false){
 					echo "Data could not be retrieved from database.";
@@ -200,13 +201,12 @@
 					echo "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'addLocOption':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -224,7 +224,7 @@
 					array($AddLocMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL AddLocOption(?,?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL AddLocOption(?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -238,13 +238,12 @@
 					echo "You have exceeded the maximum number of listed items!";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 
 			case 'addLimitOption':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -260,7 +259,7 @@
 					array($AddLimitMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL AddLimitOption(?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL AddLimitOption(?,?,?)}', $params);
 
 				
 				if($stmt == false){
@@ -277,13 +276,12 @@
 					
 				$x = 0;
 
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'addGameOption':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -299,7 +297,7 @@
 					array($AddGameMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL AddGameOption(?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL AddGameOption(?,?,?)}', $params);
 
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -315,13 +313,12 @@
 					
 				$x = 0;
 
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'addSession':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -355,7 +352,7 @@
 					array($AddSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL AddSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL AddSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -365,13 +362,12 @@
 					echo "End time cannot be before start time!";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 				
 			case 'editSession':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -405,7 +401,7 @@
 					array($EditSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL EditSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL EditSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -415,12 +411,11 @@
 					echo "End time cannot be before start time!";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 			case 'GetSessions':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -434,7 +429,7 @@
 					array($GetSessionsMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL GetSessions(?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL GetSessions(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -465,12 +460,11 @@
 					echo $GetSessionsMsg;
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 			case 'deleteSessionAJAX':
 				// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -484,7 +478,7 @@
 					array($DelSessId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL DeleteSession(?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL DeleteSession(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -494,12 +488,11 @@
 					echo 'Session deleted.';
 				}
 			
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 			case 'editGetVals':
 			// CONNECT TO DB
-				$connectionInfo = array('Database'=>$myDb, 'UID'=>$myUser, 'PWD'=>$myPwd);
-				$conn = sqlsrv_connect($myServer, $connectionInfo);
+				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
 				if(!$conn){
 					die('Database connection failed.\n');
@@ -514,7 +507,7 @@
 					array($SessionId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
 				);
 				
-				$stmt = sqlsrv_query($conn, '{CALL EditGetVals(?,?)}', $params);
+				$stmt = mysqli_query($conn, '{CALL EditGetVals(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -536,7 +529,7 @@
 						.$row['Notes']."#";
 				}
 				
-				sqlsrv_close($conn);
+				mysqli_close($conn);
 				break;
 		}
 	}
