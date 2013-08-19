@@ -8,7 +8,7 @@ function test(){
 	var value2 = 'avksdjh';
 	var value3 = 'testString';
 	$.post('pokerMethods.php', {method: 'test', val1: value1, val2: value2, val3: value3}, function(message){
-		
+		document.getElementById('output').innerHTML = message;
 	});
 }
 

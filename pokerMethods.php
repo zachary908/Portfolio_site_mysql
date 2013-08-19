@@ -25,7 +25,7 @@
 
 				// CREATE A TEMPORARY TABLE
 				if(!$mysqli->query("DROP TABLE IF EXISTS test") ||
-					!$mysqli->query("CREATE TABLE test(value1 VARCHAR(45), value2 VARCHAR(45), value3 VARCHAR(45))")){
+					!$mysqli->query("CREATE TABLE test(col1 VARCHAR(45), col2 VARCHAR(45), col3 VARCHAR(45))")){
 						echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
 					}
 					
@@ -38,7 +38,7 @@
 				if(!$mysqli->query("DROP PROCEDURE IF EXISTS p") ||
 					!$mysqli->query("CREATE PROCEDURE p(IN phpVal1 VARCHAR(45), IN phpVal2 VARCHAR(45), IN phpVal3 VARCHAR(45))
 						BEGIN 
-							INSERT INTO test(value1, value2, value3) VALUES(phpVal1, phpVal2, phpVal3);
+							INSERT INTO test(col1, col2, col3) VALUES(phpVal1, phpVal2, phpVal3);
 						END;")){
 					echo "Stored procedure creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
 				}
@@ -47,6 +47,11 @@
 				if (!$mysqli->query("CALL p('$phpVal1', '$phpVal2', '$phpVal3')")) {
 					echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
 				}
+				else{
+					echo "It worked!";
+				}
+				
+				// NOW ECHO RESULTS TO JS FXN
 
 				// if (!($res = $mysqli->query("SELECT id FROM test"))) {
 					// echo "SELECT failed: (" . $mysqli->errno . ") " . $mysqli->error;
