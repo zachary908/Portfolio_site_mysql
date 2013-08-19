@@ -1,6 +1,17 @@
 // GENERAL-PURPOSE FUNCTIONS
 // ----------------------------------------
 
+function test(){
+	// USE THIS FXN TO TEST PHP 'TEST' FXN
+	// SET PHP VARIABLE VALUES HERE
+	var value1 = 'blah';
+	var value2 = 'avksdjh';
+	var value3 = 'testString';
+	$.post('pokerMethods.php', {method: 'test', val1: value1, val2: value2, val3: value3}, function(message){
+		
+	});
+}
+
 function checkEnter(event, funcName){
 	var keycode = (event.keyCode) ? event.keyCode : event.which;
 	if(keycode == '13')

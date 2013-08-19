@@ -11,12 +11,55 @@
 		$methodSwitch = $_REQUEST["method"];
 	
 		switch($methodSwitch){
+			case 'test':
+				// GET VARS FROM POKERJS POST
+				$phpVal1 = $_POST['val1'];
+				$phpVal2 = $_POST['val2'];
+				$phpVal3 = $_POST['val3'];
+				
+				// CONNECT TO DB
+				$mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
+				if($mysqli->connect_errno){
+					echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+				}
+
+				// CREATE A TEMPORARY TABLE
+				if(!$mysqli->query("DROP TABLE IF EXISTS test") ||
+					!$mysqli->query("CREATE TABLE test(value1 VARCHAR(45), value2 VARCHAR(45), value3 VARCHAR(45))")){
+						echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+					}
+					
+				// INSERT VALUES WITH QUERY
+				// if(!$mysqli->query("INSERT INTO test(id, label) VALUES ('$phpVal1', '$phpVal3')")) {
+					// echo "Data insertion failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				// }
+				
+				// CREATE STORED PROCEDURE
+				if(!$mysqli->query("DROP PROCEDURE IF EXISTS p") ||
+					!$mysqli->query("CREATE PROCEDURE p(IN phpVal1 VARCHAR(45), IN phpVal2 VARCHAR(45), IN phpVal3 VARCHAR(45))
+						BEGIN 
+							INSERT INTO test(value1, value2, value3) VALUES(phpVal1, phpVal2, phpVal3);
+						END;")){
+					echo "Stored procedure creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				}
+				
+				// INSERT VALUES USING STORED PROCEDURE
+				if (!$mysqli->query("CALL p('$phpVal1', '$phpVal2', '$phpVal3')")) {
+					echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				}
+
+				// if (!($res = $mysqli->query("SELECT id FROM test"))) {
+					// echo "SELECT failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				// }
+
+				$mysqli->close();
+				break;
 			case 'register':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if ($mysqli->connect_errno){
+					echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 				}
 				
 				// ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
@@ -30,15 +73,20 @@
 				
 				$regMsg = 0;				
 
-				$params = array(
-					array($Email, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					array($Username, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					array($Password, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					array($regMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
-				);
+				// $params = array(
+					// array($Email, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
+					// array($Username, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
+					// array($Password, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
+					// array($regMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
+				// );
 				
-				// CALL 'REGISTER' SP
-				$stmt = mysqli_query($conn, '{CALL RegisterUser($Email,$Username,$Password,?)}');
+				// // CALL 'REGISTER' SP
+				// $stmt = mysqli_query($mysqli, "CALL RegisterUser('$Email','$Username','$Password','$regMsg')");
+				
+				if(!$mysqli->query("CALL RegisterUser('$Email','$Username','$Password','OUT $regMsg')")){
+					echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				}
+				
 
 				if($stmt === false){
 					echo 'Data could not be entered into database.';
@@ -56,17 +104,18 @@
 					echo "That email is already registered.";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'login':
 				// $_SESSION['USER']['NAME'] AND $_SESSION['USER']['ID'] ARE SET IN THIS METHOD
 				
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$Username = $_POST['logUsername'];
@@ -82,7 +131,7 @@
 					array($logMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				//$stmt = mysqli_query($conn, '{CALL Login(?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL Login(?,?,?)}', $params);
 				
 				/*$res = mysql_query('call sp_sel_test()');
 				if ($res === FALSE) {
@@ -98,7 +147,7 @@
 				$sql = "SELECT Id FROM Members
 						WHERE Username = '$Username'";
 				
-				$stmt = mysqli_query($conn, $sql);
+				$stmt = mysqli_query($mysqli, $sql);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -117,7 +166,7 @@
 					echo "That username is not registered.";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'logout':
@@ -126,10 +175,11 @@
 			
 			case 'getListAJAX':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				// NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -143,7 +193,7 @@
 					array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL GetList(?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL GetList(?,?,?)}', $params);
 
 				if($stmt === false){
 					echo "Data could not be retrieved from database.";
@@ -166,15 +216,16 @@
 					}
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 			
 			case 'getLocListAJAX':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				// NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -186,7 +237,7 @@
 					array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL GetLocList(?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL GetLocList(?,?)}', $params);
 
 				if($stmt === false){
 					echo "Data could not be retrieved from database.";
@@ -201,15 +252,16 @@
 					echo "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'addLocOption':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$MemberId = $_SESSION['user']['id'];
@@ -224,7 +276,7 @@
 					array($AddLocMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL AddLocOption(?,?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL AddLocOption(?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -238,15 +290,16 @@
 					echo "You have exceeded the maximum number of listed items!";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 
 			case 'addLimitOption':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$PhpLimitVal = $_REQUEST['phpLimitVal'];
@@ -259,7 +312,7 @@
 					array($AddLimitMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL AddLimitOption(?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL AddLimitOption(?,?,?)}', $params);
 
 				
 				if($stmt == false){
@@ -276,15 +329,16 @@
 					
 				$x = 0;
 
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'addGameOption':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$PhpGameVal = $_REQUEST['phpGameVal'];
@@ -297,7 +351,7 @@
 					array($AddGameMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL AddGameOption(?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL AddGameOption(?,?,?)}', $params);
 
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -313,15 +367,16 @@
 					
 				$x = 0;
 
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'addSession':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$MemberId = $_SESSION['user']['id'];
@@ -352,7 +407,7 @@
 					array($AddSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL AddSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL AddSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -362,15 +417,16 @@
 					echo "End time cannot be before start time!";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 				
 			case 'editSession':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$SessionId = $_SESSION['editRowId'];
@@ -401,7 +457,7 @@
 					array($EditSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL EditSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL EditSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
 				
 				if($stmt == false){
 					die(print_r(sqlsrv_errors(), true));
@@ -411,14 +467,15 @@
 					echo "End time cannot be before start time!";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 			case 'GetSessions':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$MemberId = $_SESSION['user']['id'];
@@ -429,7 +486,7 @@
 					array($GetSessionsMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL GetSessions(?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL GetSessions(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -460,14 +517,15 @@
 					echo $GetSessionsMsg;
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 			case 'deleteSessionAJAX':
 				// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$MemberId = $_SESSION['user']['id'];
@@ -478,7 +536,7 @@
 					array($DelSessId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL DeleteSession(?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL DeleteSession(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -488,14 +546,15 @@
 					echo 'Session deleted.';
 				}
 			
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 			case 'editGetVals':
 			// CONNECT TO DB
-				$conn = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
 				
-				if(!$conn){
-					die('Database connection failed.\n');
+				if (mysqli_connect_errno()) {
+					printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
+					exit();
 				}
 				
 				$MemberId = $_SESSION['user']['id'];
@@ -507,7 +566,7 @@
 					array($SessionId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
 				);
 				
-				$stmt = mysqli_query($conn, '{CALL EditGetVals(?,?)}', $params);
+				$stmt = mysqli_query($mysqli, '{CALL EditGetVals(?,?)}', $params);
 				
 				if($stmt === false){
 					echo 'Data could not be retrieved from database.';
@@ -529,7 +588,7 @@
 						.$row['Notes']."#";
 				}
 				
-				mysqli_close($conn);
+				$mysqli->close();
 				break;
 		}
 	}
