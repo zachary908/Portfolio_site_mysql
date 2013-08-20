@@ -955,40 +955,40 @@ function getTime(hourOption, minOption, amPmOption){
 function register(){
     $('#regErrLbl').html("");
     if($.trim($('#regEmail').val()) != "" && $.trim($('#regUsername').val()) != "" && $.trim($('#regPasswd').val()) != "" && $.trim($('#regConfirmPasswd').val()) != ""){
-            if(checkEmail($('#regEmail').val())){
-                if(checkName($('#regUsername').val())){
-                    if(checkPwd($('#regPasswd').val())){
-                        if($('#regPasswd').val() == $('#regConfirmPasswd').val()){
-                            $.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
-                            regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
-                                if(message == '1'){
-                                    $('#regErrLbl').html("A user with that email address already exists.");
-                                }
-                                else if(message == '2'){
-                                    $('#regErrLbl').html("Sorry, that Username is taken.");
-                                }
-                                else{
-                                    alert("You are registered, " + $('#regUsername').val() + "!");
-                                    hideModal('registerModal');
-                                    //window.location = 'pokerSummary.php';
-                                }
-                            });
-                        }
-                        else{
-                            $('#regErrLbl').html("Passwords do not match.");
-                        }
+        if(checkEmail($('#regEmail').val())){
+            if(checkName($('#regUsername').val())){
+                if(checkPwd($('#regPasswd').val())){
+                    if($('#regPasswd').val() == $('#regConfirmPasswd').val()){
+                        $.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
+                        regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
+                            if(message == '1'){
+                                $('#regErrLbl').html("A user with that email address already exists.");
+                            }
+                            else if(message == '2'){
+                                $('#regErrLbl').html("Sorry, that Username is taken.");
+                            }
+                            else{
+                                alert("You are registered, " + $('#regUsername').val() + "!");
+                                hideModal('registerModal');
+                                window.location = 'pokerSummary.php';
+                            }
+                        });
                     }
                     else{
-                        $('#regErrLbl').html("Password must be 6 - 20 characters.");
+                        $('#regErrLbl').html("Passwords do not match.");
                     }
                 }
                 else{
-                    $('#regErrLbl').html("Username must be 3 - 20 characters.");
+                    $('#regErrLbl').html("Password must be 6 - 20 characters.");
                 }
             }
             else{
-                $('#regErrLbl').html("Email does not appear to be valid.");
+                $('#regErrLbl').html("Username must be 3 - 20 characters.");
             }
+        }
+        else{
+            $('#regErrLbl').html("Email does not appear to be valid.");
+        }
     }
     else{
         $('#regErrLbl').html("Please complete all fields.");
@@ -998,26 +998,26 @@ function register(){
 function login(){
     $('#logErrLbl').html("");
     if($.trim($('#logUsername').val()) != "" && $.trim($('#logPasswd').val()) != ""){
-            if(checkName($('#logUsername').val())){
-                    if(checkPwd($('#logPasswd').val())){
-                            $.post('pokerMethods.php', {method: 'login', logUsername: $.trim($('#logUsername').val()), logPasswd: $.trim($('#logPasswd').val())}, function(message){
-                                    if(message != ""){
-                                            $('#logErrLbl').html(message);
-                                    }
-                                    else{
-                                            alert("Welcome, " + $('#logUsername').val() + "!");
-                                            hideModal('loginModal');
-                                            window.location = 'pokerSummary.php';
-                                    }
-                            });
+        if(checkName($('#logUsername').val())){
+            if(checkPwd($('#logPasswd').val())){
+                $.post('pokerMethods.php', {method: 'login', logUsername: $.trim($('#logUsername').val()), logPasswd: $.trim($('#logPasswd').val())}, function(message){
+                    if(message == '1'){
+                        $('#logErrLbl').html("That Username and/or Password is not registered.");
                     }
                     else{
-                            $('#logErrLbl').html("Password must be 6 - 20 characters.");
+                        alert("Welcome, " + $('#logUsername').val() + "!");
+                        hideModal('loginModal');
+                        window.location = 'pokerSummary.php';
                     }
+                });
             }
             else{
-                    $('#logErrLbl').html("Username must be 3 - 20 characters.");
+                $('#logErrLbl').html("Password must be 6 - 20 characters.");
             }
+        }
+        else{
+            $('#logErrLbl').html("Username must be 3 - 20 characters.");
+        }
     }
     else{
     $('#logErrLbl').html("Please complete all fields.");

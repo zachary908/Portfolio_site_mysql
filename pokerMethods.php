@@ -62,10 +62,10 @@
 
                 // ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
                 $Email = strtolower($_POST['regEmail']);
-                $Email = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                //$EncEmail = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
                 $Username = $_POST['regUsername'];
                 $Password = $_POST['regPasswd'];
-                $Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                //$EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
                 $strQuery = "CALL RegisterUser('" . $Email . "', '" . $Username . "', '" . $Password . "', @regMsg)";
 
@@ -73,85 +73,52 @@
                     echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
                 }
 
-//                do {
-//                    if ($res = $mysqli->store_result()) {
-//                        printf("---\n");
-//                        var_dump($res->fetch_all());
-//                        $res->free();
-//                    } else {
-//                        if ($mysqli->errno) {
-//                            echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
-//                        }
-//                    }
-//                } while ($mysqli->more_results() && $mysqli->next_result());
-                   
                 // GET THE VALUE OF THE OUTPUT VARIABLE
                 $res = $mysqli->store_result();
                 $row = $res->fetch_assoc();
+                
+                // IF REGMSG = 1, EMAIL EXISTS ALREADY,
+                // IF REGMSG = 2, USERNAME EXISTS ALREADY
+                if($row['regMsg'] == 0){
+                    $_SESSION['user']['name'] = $Username;
+                }
                 
                 echo $row['regMsg'];
                 $mysqli->close();
                 break;
 
             case 'login':
-                // $_SESSION['USER']['NAME'] AND $_SESSION['USER']['ID'] ARE SET IN THIS METHOD
+                // $_SESSION['USER']['NAME'] IS SET IN THIS METHOD
 
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $Username = $_POST['logUsername'];
 
                 $Password = $_POST['logPasswd'];
-                $Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                //$EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $logMsg = 0;
-
-                $params = array(
-                    array($Username, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-                    array($Password, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-                    array($logMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL Login(?,?,?)}', $params);
-
-                /*$res = mysql_query('call sp_sel_test()');
-                if ($res === FALSE) {
-                        die(mysql_error());
-                }*/
-
-                if($stmt === false){
-                    echo 'Data could not be entered into database.';
-                    die(print_r(sqlsrv_errors(), true));
+                $strQuery = "CALL Login('" . $Username . "', '" . $Password . "', @logMsg)";
+                
+                if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
                 }
 
-                //make a select statement to get the user id
-                $sql = "SELECT Id FROM Members
-                        WHERE Username = '$Username'";
-
-                $stmt = mysqli_query($mysqli, $sql);
-
-                if($stmt === false){
-                    echo 'Data could not be retrieved from database.';
-                    die(print_r(sqlsrv_errors(), true));
-                }
-
-                while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)){
-                    $_SESSION['user']['id'] = $row['Id'];
-                }
-
-                if($logMsg == 0){
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                
+                // IF LOGMSG = 0, USER IS LOGGED IN
+                // IF LOGMSG = 1, USERNAME AND/OR PWD NOT FOUND
+                if($row['logMsg'] == 0){
                     $_SESSION['user']['name'] = $Username;
-                    echo "";
                 }
-                else{
-                    echo "That username is not registered.";
-                }
-
+                
+                echo $row['logMsg'];
+                
                 $mysqli->close();
                 break;
 
