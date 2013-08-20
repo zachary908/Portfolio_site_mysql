@@ -1,6 +1,8 @@
 <?php
     include 'controls/pokerHeader.php';
 ?>
+<button onclick='getUserIdOnName();'>getUserIdOnName</button>
+    <div id='output'>some output</div>
     <!-- THIS HIDDEN TABLE HOLDS ALL DATA FOR CURRENT USER -->
     <div id="sumData" style="position: absolute; visibility: hidden"></div>
 
@@ -190,6 +192,7 @@
 
     <script>
         $(document).ready(getSessionsAndSum());
+        $(document).ready(getUserIdOnName());
     </script>
 
 <?php

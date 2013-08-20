@@ -968,7 +968,7 @@ function register(){
                                 $('#regErrLbl').html("Sorry, that Username is taken.");
                             }
                             else{
-                                alert("You are registered, " + $('#regUsername').val() + "!");
+                                alert("You are registered, " + $('#regUsername').val() + "! MESSAGE: " + message);
                                 hideModal('registerModal');
                                 window.location = 'pokerSummary.php';
                             }
@@ -1022,6 +1022,12 @@ function login(){
     else{
     $('#logErrLbl').html("Please complete all fields.");
     }
+}
+
+function getUserIdOnName(){
+    $.post('PokerMethods.php', {method : 'getUserIdOnName'}, function(message){
+        $('#output').html(message);
+    });
 }
 
 function logout(){

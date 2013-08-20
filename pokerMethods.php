@@ -10,7 +10,7 @@
     try{
         $methodSwitch = $_REQUEST["method"];
 
-        switch($methodSwitch){
+        switch($methodSwitch){ 
             case 'test':
                 // GET VARS FROM POKERJS POST
                 $phpVal1 = $_POST['val1'];
@@ -52,6 +52,30 @@
 
                 $mysqli->close();
                 break;
+            case 'getUserIdOnName':
+                // GET VARS
+                $Username = $_SESSION['user']['name'];
+
+                // CONNECT TO DB
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                }
+                
+                $strQuery = "SELECT Id FROM members WHERE Username = '" . $Username . "';";
+                if(!$mysqli->multi_query($strQuery)){
+                    echo "Query failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                }
+                
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                echo $row['Id'];
+                
+                $res->free();
+                
+                $mysqli->close();
+                break;
+                
             case 'register':
                 // CONNECT TO DB
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
@@ -67,28 +91,31 @@
                 $Password = $_POST['regPasswd'];
                 $EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $strQuery = "CALL RegisterUser('" . $EncEmail . "', '" . $Username . "', '" . $EncPassword . "', @regMsg)";
+                $strQuery1 = "CALL RegisterUser('" . $EncEmail . "', '" . $Username . "', '" . $EncPassword . "', @regMsg);";
 
-                if (!$mysqli->multi_query($strQuery)) {
+                if (!$mysqli->multi_query($strQuery1)) {
                     echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
                 }
 
                 // GET THE VALUE OF THE OUTPUT VARIABLE
-                $res = $mysqli->store_result();
-                $row = $res->fetch_assoc();
-                
                 // IF REGMSG = 1, EMAIL EXISTS ALREADY,
                 // IF REGMSG = 2, USERNAME EXISTS ALREADY
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                echo $row['regMsg'];
+                
+                // SET $_SESSION['user']['name']
                 if($row['regMsg'] == 0){
                     $_SESSION['user']['name'] = $Username;
                 }
                 
-                echo $row['regMsg'];
+                $res->free();
+                
                 $mysqli->close();
                 break;
 
             case 'login':
-                // $_SESSION['USER']['NAME'] IS SET IN THIS METHOD
+                // $_SESSION['USER']['NAME'] AND $_SESSION['USER']['ID'] IS SET IN THIS METHOD
 
                 // CONNECT TO DB
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
@@ -113,9 +140,14 @@
                 
                 // IF LOGMSG = 0, USER IS LOGGED IN
                 // IF LOGMSG = 1, USERNAME AND/OR PWD NOT FOUND
+                
+                // SET $_SESSION['user']['name']
                 if($row['logMsg'] == 0){
                     $_SESSION['user']['name'] = $Username;
                 }
+                
+                // GET AND SET THE $_SESSION['user']['id']
+                
                 
                 echo $row['logMsg'];
                 
@@ -424,11 +456,10 @@
                 break;
             case 'GetSessions':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
