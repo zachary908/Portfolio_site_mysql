@@ -961,13 +961,16 @@ function register(){
                         if($('#regPasswd').val() == $('#regConfirmPasswd').val()){
                             $.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
                             regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
-                                if(message != ""){
-                                    $('#output').html(message);
+                                if(message == '1'){
+                                    $('#regErrLbl').html("A user with that email address already exists.");
+                                }
+                                else if(message == '2'){
+                                    $('#regErrLbl').html("Sorry, that Username is taken.");
                                 }
                                 else{
                                     alert("You are registered, " + $('#regUsername').val() + "!");
                                     hideModal('registerModal');
-                                    window.location = 'pokerSummary.php';
+                                    //window.location = 'pokerSummary.php';
                                 }
                             });
                         }

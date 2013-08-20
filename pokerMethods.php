@@ -62,33 +62,34 @@
 
                 // ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
                 $Email = strtolower($_POST['regEmail']);
-                //$Email = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                $Email = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
                 $Username = $_POST['regUsername'];
                 $Password = $_POST['regPasswd'];
-                //$Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
-
-                $regMsg = 0;
+                $Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
                 $strQuery = "CALL RegisterUser('" . $Email . "', '" . $Username . "', '" . $Password . "', @regMsg)";
-
-                echo $strQuery."\n";
 
                 if (!$mysqli->multi_query($strQuery)) {
                     echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
                 }
 
-                do {
-                    if ($res = $mysqli->store_result()) {
-                        printf("---\n");
-                        var_dump($res->fetch_all());
-                        $res->free();
-                    } else {
-                        if ($mysqli->errno) {
-                            echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
-                        }
-                    }
-                } while ($mysqli->more_results() && $mysqli->next_result());
-
+//                do {
+//                    if ($res = $mysqli->store_result()) {
+//                        printf("---\n");
+//                        var_dump($res->fetch_all());
+//                        $res->free();
+//                    } else {
+//                        if ($mysqli->errno) {
+//                            echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+//                        }
+//                    }
+//                } while ($mysqli->more_results() && $mysqli->next_result());
+                   
+                // GET THE VALUE OF THE OUTPUT VARIABLE
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                
+                echo $row['regMsg'];
                 $mysqli->close();
                 break;
 
