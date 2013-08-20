@@ -23,91 +23,71 @@
 					echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 				}
 
-				// CREATE A TEMPORARY TABLE
-				if(!$mysqli->query("DROP TABLE IF EXISTS test") ||
-					!$mysqli->query("CREATE TABLE test(col1 VARCHAR(45), col2 VARCHAR(45), col3 VARCHAR(45))")){
-						echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
-					}
-					
-				// INSERT VALUES WITH QUERY
-				// if(!$mysqli->query("INSERT INTO test(id, label) VALUES ('$phpVal1', '$phpVal3')")) {
-					// echo "Data insertion failed: (" . $mysqli->errno . ") " . $mysqli->error;
-				// }
-				
-				// CREATE STORED PROCEDURE
-				if(!$mysqli->query("DROP PROCEDURE IF EXISTS p") ||
-					!$mysqli->query("CREATE PROCEDURE p(IN phpVal1 VARCHAR(45), IN phpVal2 VARCHAR(45), IN phpVal3 VARCHAR(45))
-						BEGIN 
-							INSERT INTO test(col1, col2, col3) VALUES(phpVal1, phpVal2, phpVal3);
-						END;")){
+				if (!$mysqli->query("DROP TABLE IF EXISTS test") ||
+					!$mysqli->query("CREATE TABLE test(id INT, lbl VARCHAR(45))") ||
+					!$mysqli->query("INSERT INTO test(id, lbl) VALUES (1, '$phpVal1'), (2, '$phpVal2'), (3, '$phpVal3')")) {
+					echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+				}
+
+				if (!$mysqli->query("DROP PROCEDURE IF EXISTS p") ||
+					!$mysqli->query("CREATE PROCEDURE p() READS SQL DATA BEGIN SELECT * FROM test; END;")) {
 					echo "Stored procedure creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
 				}
-				
-				// INSERT VALUES USING STORED PROCEDURE
-				if (!$mysqli->query("CALL p('$phpVal1', '$phpVal2', '$phpVal3')")) {
+
+				if (!$mysqli->multi_query("CALL p()")) {
 					echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
 				}
-				else{
-					echo "It worked!";
-				}
-				
-				// NOW ECHO RESULTS TO JS FXN
 
-				// if (!($res = $mysqli->query("SELECT id FROM test"))) {
-					// echo "SELECT failed: (" . $mysqli->errno . ") " . $mysqli->error;
-				// }
+				do {
+					if ($res = $mysqli->store_result()) {
+						printf("---\n");
+						var_dump($res->fetch_all());
+						$res->free();
+					} else {
+						if ($mysqli->errno) {
+							echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+						}
+					}
+				} while ($mysqli->more_results() && $mysqli->next_result());
 
 				$mysqli->close();
 				break;
 			case 'register':
 				// CONNECT TO DB
-				$mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+				$mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 				
-				if ($mysqli->connect_errno){
+				if($mysqli->connect_errno){
 					echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 				}
 				
 				// ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
 				$Email = strtolower($_POST['regEmail']);
-				$Email = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
-				
+				//$Email = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 				$Username = $_POST['regUsername'];
-				
 				$Password = $_POST['regPasswd'];
-				$Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+				//$Password = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 				
-				$regMsg = 0;				
-
-				// $params = array(
-					// array($Email, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					// array($Username, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					// array($Password, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('max')),
-					// array($regMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
-				// );
+				$regMsg = 0;
 				
-				// // CALL 'REGISTER' SP
-				// $stmt = mysqli_query($mysqli, "CALL RegisterUser('$Email','$Username','$Password','$regMsg')");
+				$strQuery = "CALL RegisterUser('" . $Email . "', '" . $Username . "', '" . $Password . "', @regMsg)";
 				
-				if(!$mysqli->query("CALL RegisterUser('$Email','$Username','$Password','OUT $regMsg')")){
+				//echo $strQuery;
+				
+				if (!$mysqli->multi_query($strQuery)) {
 					echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
 				}
 				
-
-				if($stmt === false){
-					echo 'Data could not be entered into database.';
-					die(print_r(sqlsrv_errors(), true));
-				}
-				
-				if($regMsg == 0){
-					echo "";
-					$_SESSION['user']['name'] = $Username;
-				}
-				else if($regMsg == 1){
-					echo "Sorry. That username is already registered.";
-				}
-				else if($regMsg == 2){
-					echo "That email is already registered.";
-				}
+				do {
+					if ($res = $mysqli->store_result()) {
+						printf("---\n");
+						var_dump($res->fetch_all());
+						$res->free();
+					} else {
+						if ($mysqli->errno) {
+							echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+						}
+					}
+				} while ($mysqli->more_results() && $mysqli->next_result());
 				
 				$mysqli->close();
 				break;

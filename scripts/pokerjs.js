@@ -962,7 +962,7 @@ function register(){
 						$.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
 						regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
 							if(message != ""){
-								$('#regErrLbl').html(message);
+								$('#output').html(message);
 							}
 							else{
 								alert("You are registered, " + $('#regUsername').val() + "!");
