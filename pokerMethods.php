@@ -62,12 +62,12 @@
 
                 // ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
                 $Email = strtolower($_POST['regEmail']);
-                //$EncEmail = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                $EncEmail = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
                 $Username = $_POST['regUsername'];
                 $Password = $_POST['regPasswd'];
-                //$EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                $EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $strQuery = "CALL RegisterUser('" . $Email . "', '" . $Username . "', '" . $Password . "', @regMsg)";
+                $strQuery = "CALL RegisterUser('" . $EncEmail . "', '" . $Username . "', '" . $EncPassword . "', @regMsg)";
 
                 if (!$mysqli->multi_query($strQuery)) {
                     echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
@@ -100,9 +100,9 @@
                 $Username = $_POST['logUsername'];
 
                 $Password = $_POST['logPasswd'];
-                //$EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+                $EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $strQuery = "CALL Login('" . $Username . "', '" . $Password . "', @logMsg)";
+                $strQuery = "CALL Login('" . $Username . "', '" . $EncPassword . "', @logMsg)";
                 
                 if (!$mysqli->multi_query($strQuery)) {
                     echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
