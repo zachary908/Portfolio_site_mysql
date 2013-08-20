@@ -2,14 +2,14 @@
 // ----------------------------------------
 
 function test(){
-	// USE THIS FXN TO TEST PHP 'TEST' FXN
-	// SET PHP VARIABLE VALUES HERE
-	var value1 = 'blah';
-	var value2 = 'avksdjh';
-	var value3 = 'testString';
-	$.post('pokerMethods.php', {method: 'test', val1: value1, val2: value2, val3: value3}, function(message){
-		document.getElementById('output').innerHTML = message;
-	});
+    // USE THIS FXN TO TEST PHP 'TEST' FXN
+    // SET PHP VARIABLE VALUES HERE
+    var value1 = 'blah';
+    var value2 = 'avksdjh';
+    var value3 = 'testString';
+    $.post('pokerMethods.php', {method: 'test', val1: value1, val2: value2, val3: value3}, function(message){
+        document.getElementById('output').innerHTML = message;
+    });
 }
 
 function checkEnter(event, funcName){
@@ -953,72 +953,72 @@ function getTime(hourOption, minOption, amPmOption){
 }
 
 function register(){
-	$('#regErrLbl').html("");
-	if($.trim($('#regEmail').val()) != "" && $.trim($('#regUsername').val()) != "" && $.trim($('#regPasswd').val()) != "" && $.trim($('#regConfirmPasswd').val()) != ""){
-		if(checkEmail($('#regEmail').val())){
-			if(checkName($('#regUsername').val())){
-				if(checkPwd($('#regPasswd').val())){
-					if($('#regPasswd').val() == $('#regConfirmPasswd').val()){
-						$.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
-						regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
-							if(message != ""){
-								$('#output').html(message);
-							}
-							else{
-								alert("You are registered, " + $('#regUsername').val() + "!");
-								hideModal('registerModal');
-								window.location = 'pokerSummary.php';
-							}
-						});
-					}
-					else{
-						$('#regErrLbl').html("Passwords do not match.");
-					}
-				}
-				else{
-					$('#regErrLbl').html("Password must be 6 - 20 characters.");
-				}
-			}
-			else{
-				$('#regErrLbl').html("Username must be 3 - 20 characters.");
-			}
-		}
-		else{
-			$('#regErrLbl').html("Email does not appear to be valid.");
-		}
-	}
-	else{
-		$('#regErrLbl').html("Please complete all fields.");
-	}
+    $('#regErrLbl').html("");
+    if($.trim($('#regEmail').val()) != "" && $.trim($('#regUsername').val()) != "" && $.trim($('#regPasswd').val()) != "" && $.trim($('#regConfirmPasswd').val()) != ""){
+            if(checkEmail($('#regEmail').val())){
+                if(checkName($('#regUsername').val())){
+                    if(checkPwd($('#regPasswd').val())){
+                        if($('#regPasswd').val() == $('#regConfirmPasswd').val()){
+                            $.post('pokerMethods.php', {method: 'register', regEmail: $.trim($('#regEmail').val().toLowerCase()), 
+                            regUsername: $.trim($('#regUsername').val()), regPasswd: $.trim($('#regPasswd').val())}, function(message){
+                                if(message != ""){
+                                    $('#output').html(message);
+                                }
+                                else{
+                                    alert("You are registered, " + $('#regUsername').val() + "!");
+                                    hideModal('registerModal');
+                                    window.location = 'pokerSummary.php';
+                                }
+                            });
+                        }
+                        else{
+                            $('#regErrLbl').html("Passwords do not match.");
+                        }
+                    }
+                    else{
+                        $('#regErrLbl').html("Password must be 6 - 20 characters.");
+                    }
+                }
+                else{
+                    $('#regErrLbl').html("Username must be 3 - 20 characters.");
+                }
+            }
+            else{
+                $('#regErrLbl').html("Email does not appear to be valid.");
+            }
+    }
+    else{
+        $('#regErrLbl').html("Please complete all fields.");
+    }
 }
 
 function login(){
-	$('#logErrLbl').html("");
-	if($.trim($('#logUsername').val()) != "" && $.trim($('#logPasswd').val()) != ""){
-		if(checkName($('#logUsername').val())){
-			if(checkPwd($('#logPasswd').val())){
-				$.post('pokerMethods.php', {method: 'login', logUsername: $.trim($('#logUsername').val()), logPasswd: $.trim($('#logPasswd').val())}, function(message){
-					if(message != ""){
-						$('#logErrLbl').html(message);
-					}
-					else{
-						alert("Welcome, " + $('#logUsername').val() + "!");
-						hideModal('loginModal');
-						window.location = 'pokerSummary.php';
-					}
-				});
-			}
-			else{
-				$('#logErrLbl').html("Password must be 6 - 20 characters.");
-			}
-		}
-		else{
-			$('#logErrLbl').html("Username must be 3 - 20 characters.");
-		}
-	}
-	else{
-	$('#logErrLbl').html("Please complete all fields.")
-	}
+    $('#logErrLbl').html("");
+    if($.trim($('#logUsername').val()) != "" && $.trim($('#logPasswd').val()) != ""){
+            if(checkName($('#logUsername').val())){
+                    if(checkPwd($('#logPasswd').val())){
+                            $.post('pokerMethods.php', {method: 'login', logUsername: $.trim($('#logUsername').val()), logPasswd: $.trim($('#logPasswd').val())}, function(message){
+                                    if(message != ""){
+                                            $('#logErrLbl').html(message);
+                                    }
+                                    else{
+                                            alert("Welcome, " + $('#logUsername').val() + "!");
+                                            hideModal('loginModal');
+                                            window.location = 'pokerSummary.php';
+                                    }
+                            });
+                    }
+                    else{
+                            $('#logErrLbl').html("Password must be 6 - 20 characters.");
+                    }
+            }
+            else{
+                    $('#logErrLbl').html("Username must be 3 - 20 characters.");
+            }
+    }
+    else{
+    $('#logErrLbl').html("Please complete all fields.");
+    }
 }
 
 function logout(){
