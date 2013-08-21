@@ -217,21 +217,37 @@
 				
 				$strQuery = "CALL GetLocList('".$MemberId."');";
 				
-				// if (!$mysqli->query($strQuery)) {
 				if (!$mysqli->multi_query($strQuery)) {
 					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
 				}
 				
-				$resStmt = "";
-
 				do {
 					if ($res = $mysqli->store_result()) {
 						while ($row = $res->fetch_assoc()) {
-							// $resStmt = "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
 							$resStmt .= $resStmt . "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
 						}
 					}
 				} while ($mysqli->more_results() && $mysqli->next_result());
+
+				// $mysqli->multi_query($strQuery);
+				
+				// do {
+					// if ($res = $mysqli->store_result()) {
+						// printf("---\n");
+						// var_dump($res->fetch_all());
+						// $res->free();
+					// } else {
+						// if ($mysqli->errno) {
+							// echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+						// }
+					// }
+				// } while ($mysqli->more_results() && $mysqli->next_result());
+
+                // if($getListMsg == 1){
+                    // echo "No data was retrieved from database.";
+                // }
+				
+				// $res->free();
 
                 echo $resStmt;
 
