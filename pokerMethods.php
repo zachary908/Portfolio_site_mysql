@@ -255,17 +255,24 @@
                         
                 if (!$mysqli->multi_query($strQuery)) {
                     echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+                }
+                    
+                // GET VALUE OF AddLocMsg
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
                 
-                // GET RESULTS
-                 
+                $res->free();
                 
-                // IF AddLocMsgVar = 1, OPTION ALREADY EXISTS
-                if($AddLocMsg == 1){
+                // IF AddLocMsg = 1, OPTION ALREADY EXISTS
+                if ($row['AddLocMsg'] == 1) {
                     echo "That option is already listed!";
                 }
-                // IF AddLocMsgVar = 2, USER HAS REACH MAX. LOCATIONS (25)
-                if($AddLocMsg == 2){
+                // IF AddLocMsg = 2, USER HAS REACH MAX. LOCATIONS (25)
+                else if ($row['AddLocMsg'] == 2) {
                     echo "You have exceeded the maximum number of listed items!";
+                }
+                else {
+                    echo "";
                 }
 
                 $mysqli->close();
