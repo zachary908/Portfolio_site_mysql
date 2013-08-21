@@ -59,7 +59,9 @@
 				</script>';
 	}
 	
-	echo $_SESSION['user']['id'];
+	if(isset($_SESSION['user']['id'])){
+		echo $_SESSION['user']['id'];
+	}
 ?>
 	<div id="fullCover2"></div>
 	<form id="statusForm" action="../pokerSetStatus.php" method="POST" style="position: absolute">

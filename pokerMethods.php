@@ -287,7 +287,7 @@
                     echo "You have exceeded the maximum number of listed items!";
                 }
                 else {
-                    echo var_dump($_SESSION);
+                    echo "";
                 }
 
                 $mysqli->close();
