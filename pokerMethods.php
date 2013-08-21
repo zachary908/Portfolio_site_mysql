@@ -148,10 +148,7 @@
                 if($row['logMsg'] == 0){
                     $_SESSION['user']['name'] = $Username;
                 }
-                
-                // GET AND SET THE $_SESSION['user']['id']
-                
-                
+
                 echo $row['logMsg'];
                 
                 $mysqli->close();
@@ -217,26 +214,42 @@
                 // NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
                 $MemberId = $_SESSION['user']['id'];
                 $getListMsg = 0;
+				
+				$strQuery = "CALL GetLocList('".$MemberId."');";
+				
+				if (!$mysqli->multi_query($strQuery)) {
+					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+				}
+				
+				do {
+					if ($res = $mysqli->store_result()) {
+						while ($row = $res->fetch_assoc()) {
+							$resStmt .= $resStmt . "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
+						}
+					}
+				} while ($mysqli->more_results() && $mysqli->next_result());
 
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
-                );
+				// $mysqli->multi_query($strQuery);
+				
+				// do {
+					// if ($res = $mysqli->store_result()) {
+						// printf("---\n");
+						// var_dump($res->fetch_all());
+						// $res->free();
+					// } else {
+						// if ($mysqli->errno) {
+							// echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+						// }
+					// }
+				// } while ($mysqli->more_results() && $mysqli->next_result());
 
-                $stmt = mysqli_query($mysqli, '{CALL GetLocList(?,?)}', $params);
+                // if($getListMsg == 1){
+                    // echo "No data was retrieved from database.";
+                // }
+				
+				// $res->free();
 
-                if($stmt === false){
-                    echo "Data could not be retrieved from database.";
-                    die(print_r(sqlsrv_errors(), true));
-                }
-
-                if($getListMsg == 1){
-                    echo "No data was retrieved from database.";
-                }
-
-                while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                    echo "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
-                }
+                echo $resStmt;
 
                 $mysqli->close();
                 break;

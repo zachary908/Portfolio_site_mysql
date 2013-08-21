@@ -53,11 +53,13 @@
 			</script>';
 	}
         
-        if(isset($_SESSION['user']['name'])){
-            echo '<script>
-                    getUserIdOnName()
-                    </script>';
-        }
+	if(isset($_SESSION['user']['name'])){
+		echo '<script>
+				getUserIdOnName()
+				</script>';
+	}
+	
+	echo $_SESSION['user']['id'];
 ?>
 	<div id="fullCover2"></div>
 	<form id="statusForm" action="../pokerSetStatus.php" method="POST" style="position: absolute">
