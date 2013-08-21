@@ -1214,7 +1214,7 @@ function addLocOption(){
 				}
 				else{
 					clrCloseModal2('addLocationModal');
-					getLocList(newLocNameVal);
+					//getLocList(newLocNameVal);
 				}
 			});
 		}
