@@ -53,6 +53,7 @@
                 $mysqli->close();
                 break;
             case 'getUserIdOnName':
+                // $_SESSION['USER']['ID'] IS SET IN THIS METHOD
                 // GET VARS
                 $Username = $_SESSION['user']['name'];
 
@@ -115,7 +116,7 @@
                 break;
 
             case 'login':
-                // $_SESSION['USER']['NAME'] AND $_SESSION['USER']['ID'] IS SET IN THIS METHOD
+                // $_SESSION['USER']['NAME'] IS SET IN THIS METHOD
 
                 // CONNECT TO DB
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
@@ -160,11 +161,10 @@
 
             case 'getListAJAX':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 // NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -206,11 +206,10 @@
 
             case 'getLocListAJAX':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 // NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -242,11 +241,10 @@
 
             case 'addLocOption':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -280,11 +278,10 @@
 
             case 'addLimitOption':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $PhpLimitVal = $_REQUEST['phpLimitVal'];
@@ -319,11 +316,10 @@
 
             case 'addGameOption':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $PhpGameVal = $_REQUEST['phpGameVal'];
@@ -357,11 +353,10 @@
 
             case 'addSession':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -407,11 +402,10 @@
 
             case 'editSession':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $SessionId = $_SESSION['editRowId'];
@@ -505,11 +499,10 @@
                 break;
             case 'deleteSessionAJAX':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -534,11 +527,10 @@
                 break;
             case 'editGetVals':
                 // CONNECT TO DB
-                $mysqli = mysqli_connect($myServer, $myUser, $myPwd, $myDb);
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
-                if (mysqli_connect_errno()) {
-                    printf("Can't connect to localhost. Error: %s\n", mysqli_connect_error());
-                    exit();
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
