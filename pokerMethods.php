@@ -20,22 +20,22 @@
                 // CONNECT TO DB
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 if (!$mysqli->query("DROP TABLE IF EXISTS test") ||
                     !$mysqli->query("CREATE TABLE test(id INT, lbl VARCHAR(45))") ||
                     !$mysqli->query("INSERT INTO test(id, lbl) VALUES (1, '$phpVal1'), (2, '$phpVal2'), (3, '$phpVal3')")) {
-                    echo "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "Table creation failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 if (!$mysqli->query("DROP PROCEDURE IF EXISTS p") ||
                     !$mysqli->query("CREATE PROCEDURE p() READS SQL DATA BEGIN SELECT * FROM test; END;")) {
-                    echo "Stored procedure creation failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "Stored procedure creation failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 if (!$mysqli->multi_query("CALL p()")) {
-                    echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 do {
@@ -45,7 +45,7 @@
                         $res->free();
                     } else {
                         if ($mysqli->errno) {
-                            echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                            echo "Store failed: (".$mysqli->errno.") ".$mysqli->error;
                         }
                     }
                 } while ($mysqli->more_results() && $mysqli->next_result());
@@ -60,12 +60,12 @@
                 // CONNECT TO DB
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
                 
-                $strQuery = "SELECT Id FROM members WHERE Username = '" . $Username . "';";
+                $strQuery = "SELECT Id FROM members WHERE Username = '".$Username."';";
                 if(!$mysqli->multi_query($strQuery)){
-                    echo "Query failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "Query failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
                 
                 $res = $mysqli->store_result();
@@ -82,7 +82,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 // ENCRYPT EMAIL, USERNAME, PWD AND CREATE VARS WITH NAMES = DB NAMES
@@ -92,10 +92,10 @@
                 $Password = $_POST['regPasswd'];
                 $EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $strQuery1 = "CALL RegisterUser('" . $EncEmail . "', '" . $Username . "', '" . $EncPassword . "', @regMsg);";
+                $strQuery1 = "CALL RegisterUser('".$EncEmail."', '".$Username."', '".$EncPassword."', @regMsg);";
 
                 if (!$mysqli->multi_query($strQuery1)) {
-                    echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 // GET THE VALUE OF THE OUTPUT VARIABLE
@@ -122,7 +122,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $Username = $_POST['logUsername'];
@@ -130,10 +130,10 @@
                 $Password = $_POST['logPasswd'];
                 $EncPassword = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $Password, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
 
-                $strQuery = "CALL Login('" . $Username . "', '" . $EncPassword . "', @logMsg)";
+                $strQuery = "CALL Login('".$Username."', '".$EncPassword."', @logMsg)";
                 
                 if (!$mysqli->multi_query($strQuery)) {
-                    echo "CALL failed: (" . $mysqli->errno . ") " . $mysqli->error;
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 $res = $mysqli->store_result();
@@ -164,7 +164,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 // NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -209,7 +209,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 // NOTE: STORED PROCEDURE WILL ALSO RETRIEVE DATA FOR DEFAULT USER
@@ -244,31 +244,26 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
                 $PhpLocNameVal = $_REQUEST['phpLocNameVal'];
                 $PhpLocType = $_REQUEST['phpLocType'];
-                $AddLocMsg = 0;
 
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($PhpLocNameVal, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($PhpLocType, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($AddLocMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL AddLocOption(?,?,?,?)}', $params);
-
-                if($stmt == false){
-                    die(print_r(sqlsrv_errors(), true));
-                }
-
+                $strQuery = "CALL AddLocOption('".$MemberId."', '".$PhpLocNameVal."', '".$PhpLocType."', @AddLocMsg);";
+                        
+                if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+                
+                // GET RESULTS
+                 
+                
+                // IF AddLocMsgVar = 1, OPTION ALREADY EXISTS
                 if($AddLocMsg == 1){
                     echo "That option is already listed!";
                 }
-
+                // IF AddLocMsgVar = 2, USER HAS REACH MAX. LOCATIONS (25)
                 if($AddLocMsg == 2){
                     echo "You have exceeded the maximum number of listed items!";
                 }
@@ -281,7 +276,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $PhpLimitVal = $_REQUEST['phpLimitVal'];
@@ -319,7 +314,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $PhpGameVal = $_REQUEST['phpGameVal'];
@@ -356,7 +351,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -405,7 +400,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $SessionId = $_SESSION['editRowId'];
@@ -453,7 +448,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -502,7 +497,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
@@ -530,7 +525,7 @@
                 $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
                 if($mysqli->connect_errno){
-                    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
 
                 $MemberId = $_SESSION['user']['id'];
