@@ -52,6 +52,12 @@
 			tblBodyName = "sumTableBody";
 			</script>';
 	}
+        
+        if(isset($_SESSION['user']['name'])){
+            echo '<script>
+                    getUserIdOnName()
+                    </script>';
+        }
 ?>
 	<div id="fullCover2"></div>
 	<form id="statusForm" action="../pokerSetStatus.php" method="POST" style="position: absolute">

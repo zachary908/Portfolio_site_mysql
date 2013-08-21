@@ -1025,9 +1025,7 @@ function login(){
 }
 
 function getUserIdOnName(){
-    $.post('PokerMethods.php', {method : 'getUserIdOnName'}, function(message){
-        $('#output').html(message);
-    });
+    $.post('PokerMethods.php', {method : 'getUserIdOnName'});
 }
 
 function logout(){

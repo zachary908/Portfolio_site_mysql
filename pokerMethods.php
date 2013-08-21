@@ -70,7 +70,9 @@
                 
                 $res = $mysqli->store_result();
                 $row = $res->fetch_assoc();
-                echo $row['Id'];
+                
+                // SET $_SESSION['user']['id'] BASED ON $_SESSION['user']['name']
+                $_SESSION['user']['id'] = $row['Id'];
                 
                 $res->free();
                 
@@ -272,7 +274,7 @@
                     echo "You have exceeded the maximum number of listed items!";
                 }
                 else {
-                    echo "";
+                    echo var_dump($_SESSION);
                 }
 
                 $mysqli->close();
