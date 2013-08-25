@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>My Poker Page</title>
+	<title>MySQL Poker Page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="../js/jquery-ui-1.10.3.custom.js"></script>
 	<script src="../scripts/pokerjs.js"></script>

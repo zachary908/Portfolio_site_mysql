@@ -220,36 +220,20 @@
 				if (!$mysqli->multi_query($strQuery)) {
 					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
 				}
-				
+
 				do {
-					if ($res = $mysqli->store_result()) {
-						while ($row = $res->fetch_assoc()) {
-							$resStmt .= $resStmt . "<span name=\"location\">".$row['Location']."</span><span name=\"locType\">".$row['LocType']."</span>";
+					/* store first result set */
+					if ($result = $mysqli->store_result()) {
+						while ($row = $result->fetch_row()) {
+							printf("<span name=\"location\">".$row[0]."</span><span name=\"locType\">".$row[1]."</span>");
 						}
+						$result->free();
 					}
-				} while ($mysqli->more_results() && $mysqli->next_result());
-
-				// $mysqli->multi_query($strQuery);
-				
-				// do {
-					// if ($res = $mysqli->store_result()) {
-						// printf("---\n");
-						// var_dump($res->fetch_all());
-						// $res->free();
-					// } else {
-						// if ($mysqli->errno) {
-							// echo "Store failed: (" . $mysqli->errno . ") " . $mysqli->error;
-						// }
-					// }
-				// } while ($mysqli->more_results() && $mysqli->next_result());
-
-                // if($getListMsg == 1){
-                    // echo "No data was retrieved from database.";
-                // }
-				
-				// $res->free();
-
-                echo $resStmt;
+					/* print divider */
+					if ($mysqli->more_results()) {
+						printf("-----------------\n");
+					}
+				} while ($mysqli->next_result());
 
                 $mysqli->close();
                 break;
@@ -341,29 +325,31 @@
 
                 $PhpGameVal = $_REQUEST['phpGameVal'];
                 $MemberId = $_SESSION['user']['id'];
-                $AddGameMsg = 0;
-
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($PhpGameVal, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($AddGameMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL AddGameOption(?,?,?)}', $params);
-
-                if($stmt == false){
-                    die(print_r(sqlsrv_errors(), true));
+				$AddGameMsg = 0;
+				
+                $strQuery = "CALL AddGameOption('".$MemberId."', '".$PhpGameVal."', @AddGameMsg);";
+                        
+                if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
-
-                if($AddGameMsg == 1){
+                    
+                // GET VALUE OF AddGameMsg
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                
+                $res->free();
+                
+                // IF AddGameMsg = 1, OPTION ALREADY EXISTS
+                if ($row['AddGameMsg'] == 1) {
                     echo "That option is already listed!";
                 }
-
-                if($AddGameMsg == 2){
+                // IF AddGameMsg = 2, USER HAS REACH MAX. GAMES (25)
+                else if ($row['AddGameMsg'] == 2) {
                     echo "You have exceeded the maximum number of listed items!";
                 }
-
-                $x = 0;
+                else {
+                    echo "";
+                }
 
                 $mysqli->close();
                 break;
