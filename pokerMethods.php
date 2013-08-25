@@ -170,35 +170,35 @@
                 $MemberId = $_SESSION['user']['id'];
                 $ListType = $_REQUEST['listType'];
                 $getListMsg = 0;
+				
+				$strQuery = "CALL GetList('".$MemberId."', '".$ListType."');";
 
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($ListType, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($getListMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_BIT)
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL GetList(?,?,?)}', $params);
-
-                if($stmt === false){
-                    echo "Data could not be retrieved from database.";
-                    die(print_r(sqlsrv_errors(), true));
-                }
+                if (!$mysqli->multi_query($strQuery)) {
+					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+				}
 
                 if($getListMsg == 1){
                     echo "No data was retrieved from database.";
                 }
 
-                $x = 0;
-
-                while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC)){
-                    if($ListType == "game"){
-                        echo "<option name='gameOption'>".$row[$x]."</option>\n";
-                        $x+1;
-                    }
-                    else{
-                        echo "<option name='limitOption'>".$row[$x]."</option>\n";
-                    }
-                }
+                do {
+					/* store first result set */
+					if ($result = $mysqli->store_result()) {
+						while ($row = $result->fetch_row()) {
+							if($ListType == "game"){
+								printf("<option name='gameOption'>".$row[0]."</option>\n");
+							}
+							else{
+								printf("<option name='limitOption'>".$row[0]."</option>\n");
+							}
+						}
+						$result->free();
+					}
+					/* print divider */
+					if ($mysqli->more_results()) {
+						printf("-----------------\n");
+					}
+				} while ($mysqli->next_result());
 
                 $mysqli->close();
                 break;
@@ -295,22 +295,29 @@
                     array($AddLimitMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
                 );
 
-                $stmt = mysqli_query($mysqli, '{CALL AddLimitOption(?,?,?)}', $params);
+				$strQuery = "CALL AddLimitOption('".$MemberId."', '".$PhpLimitVal."', @AddGameMsg);";
 
-
-                if($stmt == false){
-                    die(print_r(sqlsrv_errors(), true));
+                if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
-
-                if($AddLimitMsg == 1){
+                    
+                // GET VALUE OF AddGameMsg
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                
+                $res->free();
+                
+                // IF AddGameMsg = 1, OPTION ALREADY EXISTS
+                if ($row['AddLimitMsg'] == 1) {
                     echo "That option is already listed!";
                 }
-
-                if($AddLimitMsg == 2){
+                // IF AddGameMsg = 2, USER HAS REACH MAX. GAMES (25)
+                else if ($row['AddLimitMsg'] == 2) {
                     echo "You have exceeded the maximum number of listed items!";
                 }
-
-                $x = 0;
+                else {
+                    echo "";
+                }
 
                 $mysqli->close();
                 break;
@@ -375,22 +382,7 @@
                 $SqlNotes = $_REQUEST['phpNotes'];
                 $AddSessionMsg = "";
 
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                    array($SqlStartDate, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_SMALLDATETIME),
-                    array($SqlEndDate, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_SMALLDATETIME),
-                    array($SqlLocation, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlGameType, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlRingTour, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_INT),
-                    array($SqlLimits, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlBuyin, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_DECIMAL('18', '2')),
-                    array($SqlCashout, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_DECIMAL('18', '2')),
-                    array($SqlPlace, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
-                    array($SqlNotes, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($AddSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL AddSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
+				$strQuery = "CALL AddSession('".$MemberId."', '".$SqlStartDate."', '".
 
                 if($stmt == false){
                     die(print_r(sqlsrv_errors(), true));
