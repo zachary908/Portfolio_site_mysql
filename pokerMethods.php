@@ -472,7 +472,7 @@
 					}
 					/* print divider */
 					if ($mysqli->more_results()) {
-						printf("-----------------\n");
+						printf("%s", '%');
 					}
 				} while ($mysqli->next_result());
 
