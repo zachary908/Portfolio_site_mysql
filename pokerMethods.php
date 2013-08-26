@@ -465,15 +465,17 @@
 					/* store first result set */
 					if ($result = $mysqli->store_result()) {
 						while ($row = $result->fetch_row()) {
+							// printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
+							// .$row[10]."#".$row[11]."#".$row[12]."#".$row[13]."#");
 							printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
-							.$row[10]."#".$row[11]."#".$row[12]."#".$row[13]."#");
+							.$row[10]."#".$row[11]."#".$row[12]."#".$row[13]."%s", '%');
 						}
 						$result->free();
 					}
 					/* print divider */
-					if ($mysqli->more_results()) {
-						printf("%s", '%');
-					}
+					// if ($mysqli->more_results()) {
+						// // printf("%s", '%');
+					// }
 				} while ($mysqli->next_result());
 
                 // ADD AN OUTPUT PARAM- IF OUTPUT PARAM = 1, STATUS MSG READS: "NO SESSIONS FOUND, YOU SHOULD ADD A SESSION",
