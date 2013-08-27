@@ -1631,7 +1631,7 @@ function confirmDelete(x){
 	var dltRowId = x.parentNode.parentNode.id;
 	document.getElementById('dltRowId').value = dltRowId;
 	
-	var tbl = document.getElementById('sessions').tBodies[0];
+	var tbl = document.getElementById('sessions').tBodies[1];
 	var rowColl = tbl.rows;
 	var startCol = 1; // 1 IS STARTDATE COL
 	for(var y=0; y<rowColl.length; y++){
@@ -2387,7 +2387,7 @@ function editGetVals(){
 		}
 		
 		// END DATE
-		var editEndDateTime = splitMsgArray[2];
+		var editEndDateTime = splitMsgArray[1];
 		
 		var splitDateTimeRegEx = /\s/;
 		var editEndDateTimeArr = editEndDateTime.split(splitDateTimeRegEx);
@@ -2398,7 +2398,7 @@ function editGetVals(){
 		var editEndMon = editEndDateArr[1];
 		var editEndDay = editEndDateArr[2];
 		
-		var editDpEndDate = editStMon + "/" + editStDay + "/" + editStYear;
+		var editDpEndDate = editEndMon + "/" + editEndDay + "/" + editEndYear;
 		
 		$('#datepickerEdit1').val(editDpEndDate);
 		

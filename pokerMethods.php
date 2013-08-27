@@ -289,12 +289,6 @@
                 $MemberId = $_SESSION['user']['id'];
                 $AddLimitMsg = 0;
 
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($PhpLimitVal, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($AddLimitMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT)
-                );
-
 				$strQuery = "CALL AddLimitOption('".$MemberId."', '".$PhpLimitVal."', @AddGameMsg);";
 
                 if (!$mysqli->multi_query($strQuery)) {
@@ -494,22 +488,16 @@
 
                 $MemberId = $_SESSION['user']['id'];
                 $DelSessId = $_POST['delSessId'];
-
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                    array($DelSessId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL DeleteSession(?,?)}', $params);
-
-                if($stmt === false){
-                    echo 'Data could not be retrieved from database.';
-                    die(print_r(sqlsrv_errors(), true));
-                }
-                else{
+				
+				$strQuery = "CALL DeleteSession('".$MemberId."', '".$DelSessId."');";
+				
+				if(!$mysqli->multi_query($strQuery)){
+					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+				}
+				else{
                     echo 'Session deleted.';
                 }
-
+                
                 $mysqli->close();
                 break;
             case 'editGetVals':
@@ -533,8 +521,8 @@
 					/* store first result set */
 					if ($result = $mysqli->store_result()) {
 						while ($row = $result->fetch_row()) {
-							printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
-							.$row[10]."#".$row[11]);
+							printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]);
+							//.$row[10]."#".$row[11]);
 						}
 						$result->free();
 					}
