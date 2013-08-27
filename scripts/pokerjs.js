@@ -2332,11 +2332,22 @@ function editGetVals(){
 		var splitMsgArray = message.split(splitRegEx);
 		
 		// START DATE
-		var editStDate = splitMsgArray[0];
-		$('#datepickerEdit').val(editStDate);
+		var editStDateTime = splitMsgArray[0];
+		var splitDateTimeRegEx = /\s/;
+		var editStDateTimeArr = editStDateTime.split(splitDateTimeRegEx);
+		var editStDate = editStDateTimeArr[0]; // start date now looks like: 2013-08-23
+		var splitStDateRegEx = /-/g;
+		var editStDateArr = editStDate.split(splitStDateRegEx);
+		var editStYear = editStDateArr[0];
+		var editStMon = editStDateArr[1];
+		var editStDay = editStDateArr[2];
+		
+		var editDpStDate = editStMon + "/" + editStDay + "/" + editStYear;
+		
+		$('#datepickerEdit').val(editDpStDate);
 		
 		// START TIME
-		var editStTime = splitMsgArray[1];
+		var editStTime = editStDateTimeArr[1];
 			var splitTimeRegEx = /:/g;
 			var splitEditStTimeArray = editStTime.split(splitTimeRegEx);
 			var editStHr24 = splitEditStTimeArray[0];

@@ -465,17 +465,11 @@
 					/* store first result set */
 					if ($result = $mysqli->store_result()) {
 						while ($row = $result->fetch_row()) {
-							// printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
-							// .$row[10]."#".$row[11]."#".$row[12]."#".$row[13]."#");
 							printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
 							.$row[10]."#".$row[11]."#".$row[12]."#".$row[13]."%s", '%');
 						}
 						$result->free();
 					}
-					/* print divider */
-					// if ($mysqli->more_results()) {
-						// // printf("%s", '%');
-					// }
 				} while ($mysqli->next_result());
 
                 // ADD AN OUTPUT PARAM- IF OUTPUT PARAM = 1, STATUS MSG READS: "NO SESSIONS FOUND, YOU SHOULD ADD A SESSION",
@@ -543,33 +537,22 @@
                 $MemberId = $_SESSION['user']['id'];
                 $SessionId = $_SESSION['editRowId'];
 
-                // GET SESSION START DATE AND ENTER INTO START DATE FIELD
-                $params = array(
-                    array($MemberId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                    array($SessionId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                );
+				$strQuery = "CALL EditGetVals('".$MemberId."', '".$SessionId."');";
 
-                $stmt = mysqli_query($mysqli, '{CALL EditGetVals(?,?)}', $params);
-
-                if($stmt === false){
-                    echo 'Data could not be retrieved from database.';
-                    die(print_r(sqlsrv_errors(), true));
+                if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
-
-                while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                    echo $row['StartDate']."#"
-                        .$row['StartTime']."#"
-                        .$row['EndDate']."#"
-                        .$row['EndTime']."#"
-                        .$row['Location']."#"
-                        .$row['GameType']."#"
-                        .$row['RingTour']."#"
-                        .$row['Limits']."#"
-                        .$row['BuyIn']."#"
-                        .$row['CashOut']."#"
-                        .$row['Place']."#"
-                        .$row['Notes']."#";
-                }
+				
+				do {
+					/* store first result set */
+					if ($result = $mysqli->store_result()) {
+						while ($row = $result->fetch_row()) {
+							printf($row[0]."#".$row[1]."#".$row[2]."#".$row[3]."#".$row[4]."#".$row[5]."#".$row[6]."#".$row[7]."#".$row[8]."#".$row[9]."#"
+							.$row[10]."#".$row[11]);
+						}
+						$result->free();
+					}
+				} while ($mysqli->next_result());
 
                 $mysqli->close();
                 break;
