@@ -2348,83 +2348,95 @@ function editGetVals(){
 		
 		// START TIME
 		var editStTime = editStDateTimeArr[1];
-			var splitTimeRegEx = /:/g;
-			var splitEditStTimeArray = editStTime.split(splitTimeRegEx);
-			var editStHr24 = splitEditStTimeArray[0];
-			var editStMin24 = splitEditStTimeArray[1];
-			var editStAmPm = "am"
+		var splitTimeRegEx = /:/g;
+		var splitEditStTimeArray = editStTime.split(splitTimeRegEx);
+		var editStHr24 = splitEditStTimeArray[0];
+		var editStMin24 = splitEditStTimeArray[1];
+		var editStAmPm = "am"
 
-			if(editStHr24 > 12){
-				editStHr12 = editStHr24 - 12;
-				editStAmPm = "pm";
+		if(editStHr24 > 12){
+			editStHr12 = editStHr24 - 12;
+			editStAmPm = "pm";
+		}
+		else{
+			editStHr12 = editStHr24;
+		}
+		
+		var editStHrOptions = document.getElementsByName('editStHourOption');
+		
+		for(var i=0; i<editStHrOptions.length; i++){
+			if(editStHrOptions[i].value == editStHr12){
+				editStHrOptions[i].selected = true;
 			}
-			else{
-				editStHr12 = editStHr24;
+		}
+		
+		var editStMinOptions = document.getElementsByName('editStMinOption');
+		
+		for(var i=0; i<editStMinOptions.length; i++){
+			if(editStMinOptions[i].value == editStMin24){
+				editStMinOptions[i].selected = true;
 			}
-			
-			var editStHrOptions = document.getElementsByName('editStHourOption');
-			
-			for(var i=0; i<editStHrOptions.length; i++){
-				if(editStHrOptions[i].value == editStHr12){
-					editStHrOptions[i].selected = true;
-				}
+		}
+		
+		var editStAmPmOptions = document.getElementsByName('editStAmPmOption');
+		
+		for(var i=0; i<editStAmPmOptions.length; i++){
+			if(editStAmPmOptions[i].value == editStAmPm){
+				editStAmPmOptions[i].selected = true;
 			}
-			
-			var editStMinOptions = document.getElementsByName('editStMinOption');
-			
-			for(var i=0; i<editStMinOptions.length; i++){
-				if(editStMinOptions[i].value == editStMin24){
-					editStMinOptions[i].selected = true;
-				}
-			}
-			
-			var editStAmPmOptions = document.getElementsByName('editStAmPmOption');
-			
-			for(var i=0; i<editStAmPmOptions.length; i++){
-				if(editStAmPmOptions[i].value == editStAmPm){
-					editStAmPmOptions[i].selected = true;
-				}
-			}
+		}
 		
 		// END DATE
-		var editEndDate = splitMsgArray[2];
-		$('#datepickerEdit1').val(editEndDate);
+		var editEndDateTime = splitMsgArray[2];
+		
+		var splitDateTimeRegEx = /\s/;
+		var editEndDateTimeArr = editEndDateTime.split(splitDateTimeRegEx);
+		var editEndDate = editEndDateTimeArr[0]; // end date now looks like: 2013-08-23
+		var splitEndDateRegEx = /-/g;
+		var editEndDateArr = editEndDate.split(splitEndDateRegEx);
+		var editEndYear = editEndDateArr[0];
+		var editEndMon = editEndDateArr[1];
+		var editEndDay = editEndDateArr[2];
+		
+		var editDpEndDate = editStMon + "/" + editStDay + "/" + editStYear;
+		
+		$('#datepickerEdit1').val(editDpEndDate);
 		
 		// END TIME
-		var editEndTime = splitMsgArray[3];
-			var splitEditEndTimeArray = editEndTime.split(splitTimeRegEx);
-			var editEndHr24 = splitEditEndTimeArray[0];
-			var editEndMin24 = splitEditEndTimeArray[1];
-			var editEndAMPM = "am"
-			
-			if(editEndHr24 > 12){
-				editEndHr12 = editEndHr24 - 12;
-				editEndAMPM = "pm";
+		var editEndTime = editEndDateTimeArr[1];
+		var splitEditEndTimeArray = editEndTime.split(splitTimeRegEx);
+		var editEndHr24 = splitEditEndTimeArray[0];
+		var editEndMin24 = splitEditEndTimeArray[1];
+		var editEndAMPM = "am"
+		
+		if(editEndHr24 > 12){
+			editEndHr12 = editEndHr24 - 12;
+			editEndAMPM = "pm";
+		}
+		else{
+			editEndHr12 = editEndHr24;
+		}
+		
+		var editEndHrOptions = document.getElementsByName('editEndHrOption');
+		for(var i=0; i<editEndHrOptions.length; i++){
+			if(editEndHrOptions[i].value == editEndHr12){
+				editEndHrOptions[i].selected = true;
 			}
-			else{
-				editEndHr12 = editEndHr24;
+		}
+		
+		var editEndMinOptions = document.getElementsByName('editEndMinOption');
+		for(var i=0; i<editEndMinOptions.length; i++){
+			if(editEndMinOptions[i].value == editEndMin24){
+				editEndMinOptions[i].selected = true;
 			}
-			
-			var editEndHrOptions = document.getElementsByName('editEndHrOption');
-			for(var i=0; i<editEndHrOptions.length; i++){
-				if(editEndHrOptions[i].value == editEndHr12){
-					editEndHrOptions[i].selected = true;
-				}
+		}
+		
+		var editEndAmPmOptions = document.getElementsByName('editEndAmPmOption');
+		for(var i=0; i<editEndAmPmOptions.length; i++){
+			if(editEndAmPmOptions[i].value == editEndAMPM){
+				editEndAmPmOptions[i].selected = true;
 			}
-			
-			var editEndMinOptions = document.getElementsByName('editEndMinOption');
-			for(var i=0; i<editEndMinOptions.length; i++){
-				if(editEndMinOptions[i].value == editEndMin24){
-					editEndMinOptions[i].selected = true;
-				}
-			}
-			
-			var editEndAmPmOptions = document.getElementsByName('editEndAmPmOption');
-			for(var i=0; i<editEndAmPmOptions.length; i++){
-				if(editEndAmPmOptions[i].value == editEndAMPM){
-					editEndAmPmOptions[i].selected = true;
-				}
-			}
+		}
 		
 		// LOCATION
 		var editLocation = splitMsgArray[4];
