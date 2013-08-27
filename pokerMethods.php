@@ -416,26 +416,12 @@
                 $SqlPlace = intval($_REQUEST['phpPlace']);
                 $SqlNotes = $_REQUEST['phpNotes'];
                 $EditSessionMsg = "";
-
-                $params = array(
-                    array($SessionId, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_UNIQUEIDENTIFIER),
-                    array($SqlStartDate, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_SMALLDATETIME),
-                    array($SqlEndDate, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_SMALLDATETIME),
-                    array($SqlLocation, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlGameType, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlRingTour, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_INT),
-                    array($SqlLimits, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($SqlBuyin, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_DECIMAL('18', '2')),
-                    array($SqlCashout, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_DECIMAL('18', '2')),
-                    array($SqlPlace, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
-                    array($SqlNotes, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR), SQLSRV_SQLTYPE_VARCHAR('MAX')),
-                    array($EditSessionMsg, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT, SQLSRV_SQLTYPE_INT),
-                );
-
-                $stmt = mysqli_query($mysqli, '{CALL EditSession(?,?,?,?,?,?,?,?,?,?,?,?)}', $params);
-
-                if($stmt == false){
-                    die(print_r(sqlsrv_errors(), true));
+				
+				$strQuery = "CALL EditSession('".$SessionId."', '".$SqlStartDate."', '".$SqlEndDate."', '".$SqlLocation."', '".$SqlGameType
+					."', '".$SqlRingTour."', '".$SqlLimits."', '".$SqlBuyin."', '".$SqlCashout."', '".$SqlPlace."', '".$SqlNotes."', @EditSessionMsg);";
+					
+				if (!$mysqli->multi_query($strQuery)) {
+                    echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
                 }
 
                 if($EditSessionMsg == 1){
