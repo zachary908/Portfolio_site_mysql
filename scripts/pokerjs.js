@@ -2459,23 +2459,23 @@ function editGetVals(){
 		}
 		
 		// LIMITS
-		var editLimit = splitMsgArray[7];
+		var editLimit = splitMsgArray[5];
 		getList('limit', editLimit);
 		
 		// BUY-IN
-		var editBuyin = splitMsgArray[8];
+		var editBuyin = splitMsgArray[6];
 		$('#editBuyin').val(editBuyin);
 		
 		// CASH OUT
-		var editCashOut = splitMsgArray[9];
+		var editCashOut = splitMsgArray[7];
 		$('#editCashout').val(editCashOut);
 		
 		// PLACE
-		var editPlace = splitMsgArray[10];
+		var editPlace = splitMsgArray[8];
 		$('#editPlace').val(editPlace);
 		
 		// NOTES
-		var editNotes = splitMsgArray[11];
+		var editNotes = splitMsgArray[9];
 		$('#editNotes').val(editNotes);
 		
 	});
