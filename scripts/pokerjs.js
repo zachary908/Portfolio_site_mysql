@@ -1644,7 +1644,15 @@ function fillTable(){
 	var dataString = "";
 	var x = 1;
 	for(var i=0; i<trArr.length; i++){
-		dataString = dataString + "<tr id=\"" + trArr[i].sessId + "\">" +
+		if(i%2==1){
+			dataString = dataString + "<tr id=\"" + trArr[i].sessId + "\" style='background-color: #ebebeb'>";
+		}
+		else{
+			dataString = dataString + "<tr id=\"" + trArr[i].sessId + "\">";
+		}
+		
+		dataString = dataString +
+		// dataString = dataString + "<tr id=\"" + trArr[i].sessId + "\">" +
 			"<td>" + x + ".</td>" +		// COL 0
 			"<td name='startDate'>" + trArr[i].startDate + "</td>" +	// COL 1
 			"<td name='location'>" + trArr[i].location + "</td>" +	// COL 2

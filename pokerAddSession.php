@@ -194,12 +194,10 @@
         <input id="place" type="text" onkeypress="checkEnter(event, 'addSession');" />
     </div>
     <!-------------------------------------->
-    <div class="modalRow">
-        <div class="modalLabelWrap">
-            <div class="modalLabel">Note:</div>
-        </div>
-        <textarea id="notes" rows="5" cols="38" maxlength="240"></textarea>
-    </div>
+	<div class="modalLabelWrap">
+		<div class="modalLabel">Note:</div>
+	</div>
+	<textarea id="notes" rows="5" cols="38" maxlength="240"></textarea>
     <!-------------------------------------->
     <div id='addSessErrLbl'></div><br>
     <button class="modalBtn" onclick="addSession()">Submit</button>
