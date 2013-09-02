@@ -505,45 +505,15 @@ function showSumTbl(byX){
 			}
 		}
 	}
-	// ----------------------------------------------------------------------------------
-
-	// // ----------------------------------------------------------------------------------
-	// // XAXIS IS DATE
-	// // ----------------------------------------------------------------------------------	
-	// var xmax = new Date("October 13, 1975 11:13:00");
-	// for(var j=0; j<totDataXArr.length; j++){
-		// var currArr = totDataXArr[j];
-		// for(var i=0; i<currArr.length; i++){
-			// if(currArr[i] >= xmax){
-				// xmax = currArr[i];
-				// // SAVE THE ARRAY IN WHICH THE XMAX OCCURS
-				// var totXmaxArr = totDataXArr[j]
-			// }
-		// }
-	// }
 	
-	// var xmin = new Date();
-	// for(var j=0; j<totDataXArr.length; j++){
-		// var currArr = totDataXArr[j];
-		// for(var i=0; i<currArr.length; i++){
-			// if(currArr[i] <= xmin){
-				// xmin = currArr[i];
-				// // SAVE THE ARRAY IN WHICH THE XMAX OCCURS
-				// var totXminArr = totDataXArr[j]
-			// }
-		// }
-	// }
-	// // BOTH GRAPHS USE SAME X SCALE, SO SEPARATE XMAXAVG NOT NEEDED
-	// var xmaxAvg = 0;
-	// for(var j=0; j<avgDataXArr.length; j++){
-		// var currArr = avgDataXArr[j];
-		// for(var i=0; i<currArr.length; i++){
-			// if(currArr[i] >= xmaxAvg){
-				// xmaxAvg = currArr[i];
-			// }
-		// }
-	// }
-	// // ----------------------------------------------------------------------------------
+	// CREATE AN ARRAY THAT COUNTS FROM XMAX TO XMIN AND USE THIS AS XAXIS
+	var xAxisArr = new Array;
+	var j =0;
+	for(var i=xmax; i>=xmin; i--){
+		xAxisArr[j] = i;
+		j++;
+	}
+	// ----------------------------------------------------------------------------------
 	
 	var ymin = 0;
 	for(var j=0; j<totDataYArr.length; j++){
@@ -564,58 +534,6 @@ function showSumTbl(byX){
 			}
 		}
 	}
-	
-	// if(byX == 'byDate'){
-		// var timeStr = "";
-		// var newStr1 = "";
-		// var newStr2 = "";
-		// for(var i=0; i<totPtArr.length; i++){
-			// timeStr = totPtArr[i][0].toString();
-			// timeStr = timeStr.slice(4,15);
-			// newStr1 = timeStr.substr(0,6);
-			// newStr1 = newStr1.replace("01", "1");
-			// newStr1 = newStr1.replace("02", "2");
-			// newStr1 = newStr1.replace("03", "3");
-			// newStr1 = newStr1.replace("04", "4");
-			// newStr1 = newStr1.replace("05", "5");
-			// newStr1 = newStr1.replace("06", "6");
-			// newStr1 = newStr1.replace("07", "7");
-			// newStr1 = newStr1.replace("08", "8");
-			// newStr1 = newStr1.replace("09", "9");
-			// newStr2 = "," + timeStr.substr(6);
-			// totPtArr[i][0] = newStr1 + newStr2;
-		// }
-		
-		// xmax = xmax.toString();
-		// xmax = xmax.slice(4,15);
-		// newStr1 = xmax.substr(0,6);
-		// newStr1 = newStr1.replace("01", "1");
-		// newStr1 = newStr1.replace("02", "2");
-		// newStr1 = newStr1.replace("03", "3");
-		// newStr1 = newStr1.replace("04", "4");
-		// newStr1 = newStr1.replace("05", "5");
-		// newStr1 = newStr1.replace("06", "6");
-		// newStr1 = newStr1.replace("07", "7");
-		// newStr1 = newStr1.replace("08", "8");
-		// newStr1 = newStr1.replace("09", "9");
-		// newStr2 = "," + xmax.substr(6);
-		// xmax = newStr1 + newStr2;
-		
-		// xmin = xmin.toString();
-		// xmin = xmin.slice(4,15);
-		// newStr1 = xmin.substr(0,6)
-		// newStr1 = newStr1.replace("01", "1");
-		// newStr1 = newStr1.replace("02", "2");
-		// newStr1 = newStr1.replace("03", "3");
-		// newStr1 = newStr1.replace("04", "4");
-		// newStr1 = newStr1.replace("05", "5");
-		// newStr1 = newStr1.replace("06", "6");
-		// newStr1 = newStr1.replace("07", "7");
-		// newStr1 = newStr1.replace("08", "8");
-		// newStr1 = newStr1.replace("09", "9");
-		// newStr2 = "," + xmin.substr(6);
-		// xmin = newStr1 + newStr2;
-	// }
 
 // DISPLAY APPROPRIATE GRAPHS
 	// The datasets as shown on the chart. Each point is an array, described below.
@@ -625,8 +543,8 @@ function showSumTbl(byX){
         // Create the Scatter chart. The arguments are: the canvas ID and the data to be represented on the chart.
         // You can have multiple sets of data if you wish
 		// SINCE GRAPH DOESN'T DISPLAY FIRST LABEL, REMOVE IT FROM LABEL ARRAY
-		if(totXmaxArr){
-			totXmaxArr.shift();
+		if(xAxisArr){
+			xAxisArr.shift();
 			var canvas = document.getElementById('cvs1');
 			RGraph.Reset(canvas);
 			var sg = new RGraph.Scatter('cvs1', totPtsArr)
@@ -646,7 +564,7 @@ function showSumTbl(byX){
 				.Set('xmin', xmax)
 				.Set('xmax', xmin)
 				.Set('chart.ticksize', 3)
-				.Set('chart.labels', totXmaxArr)
+				.Set('chart.labels', xAxisArr)
 				.Set('chart.line', true)
 				.Set('chart.line.colors', lineColors)
 				.Set('key', tblSelArr)
@@ -679,7 +597,7 @@ function showSumTbl(byX){
 				.Set('xmin', xmax)
 				.Set('xmax', xmin)
 				.Set('chart.ticksize', 3)
-				.Set('chart.labels', totXmaxArr)
+				.Set('chart.labels', xAxisArr)
 				.Set('chart.line', true)
 				.Set('chart.line.colors', lineColors)
 				.Set('key', tblSelArr)
@@ -691,79 +609,14 @@ function showSumTbl(byX){
 				}
 				// Now call the .Draw() method to draw the chart.
 				sg2.Draw();
-			}
-			else{
-				var canvas = document.getElementById('cvs1');
-				RGraph.Reset(canvas);
-				var canvas = document.getElementById('cvs2');
-				RGraph.Reset(canvas);
-				return;
-			}
-			
-		// var lg = new RGraph.Line('cvs1', totDataYArr)
-            // // Configure the chart to look as you want it to.
-            // .Set('chart.background.barcolor1', 'white')
-            // .Set('chart.background.barcolor2', 'white')
-            // .Set('chart.grid.color', 'rgba(238,238,238,1)')
-			// // .Set('chart.xaxis', true)
-			// .Set('chart.axis.linewidth', 1)
-			// .Set('chart.linewidth', 3)
-            // .Set('chart.gutter.left', 50)
-			// // .Set('chart.xscale', true)
-			// .Set('chart.yscale', true)
-			// .Set('chart.background.grid.autofit.numhlines', 10)
-			// .Set('chart.background.grid.autofit.numvlines', xmax-1)
-			// // .Set('chart.xmin', 1)
-            // // .Set('chart.xmax', xmax) // Important!
-			// .Set('chart.ticksize', 2)
-			// .Set('chart.labels', totXmaxArr)
-			// // .Set('chart.labels.specific.align', 'center')
-			// // .Set('chart.scale.round', true)
-			// // .Set('chart.ymin', -2500)
-			// .Set('chart.tickmarks', 'circle')
-			// .Set('chart.units.pre', '$')
-			// // .Set('chart.line', true)
-			// // IF YMIN > 0, PUT XAXIS AT BOTTOM OF GRAPH
-			// if(ymin < 0){
-				// lg.Set('chart.xaxispos', 'center')
-			// }
-            // // Now call the .Draw() method to draw the chart.
-            // lg.Draw();
-		
-		// var sg = new RGraph.Scatter('cvs1', points)
-            // // Configure the chart to look as you want it to.
-            // .Set('chart.background.barcolor1', 'white')
-            // .Set('chart.background.barcolor2', 'white')
-            // .Set('chart.grid.color', 'rgba(238,238,238,1)')
-			// // .Set('chart.xaxis', true)
-			// .Set('chart.xaxispos', 'center')
-			// .Set('chart.axis.linewidth', 1)
-			// .Set('chart.line.linewidth', 3)
-            // .Set('chart.gutter.left', 50)
-			// // .Set('chart.xscale', true)
-			// .Set('chart.yscale', true)
-			// .Set('chart.background.grid.autofit.numhlines', 10)
-			// .Set('chart.background.grid.autofit.numvlines', xmax)
-			// // .Set('chart.xmin', 1)
-            // .Set('chart.xmax', xmax) // Important!
-			// .Set('chart.ticksize', 3)
-			// .Set('chart.labels', totDataX)
-			// // .Set('chart.labels.specific.align', 'center')
-			// // .Set('chart.scale.round', true)
-			// // .Set('chart.ymin', -2500)
-			// .Set('chart.tickmarks', 'circle')
-			// .Set('chart.units.pre', '$')
-			// .Set('chart.line', true)
-			
-            // // Now call the .Draw() method to draw the chart.
-            // .Draw();
-			
-	// The datasets as shown on the chart. Each point is an array, described below.
-        // var data1 = [ [67,78,null, 'The winner!'],[67,40,'red'] ];
-        // var data2 = [ [0,78,'green'],[67,40,'green'] ];
-        
-        // Create the Scatter chart. The arguments are: the canvas ID and the data to be represented on the chart.
-        // You can have multiple sets of data if you wish
+		}
+		else{
+			var canvas = document.getElementById('cvs1');
+			RGraph.Reset(canvas);
+			var canvas = document.getElementById('cvs2');
+			RGraph.Reset(canvas);
+			return;
+		}
 }
 
 function tblToRGraphDate(tblDate){
@@ -2446,11 +2299,12 @@ function editGetVals(){
 		showLocType();
 			
 		// GAME TYPE
-		var editGameType = splitMsgArray[5];
+		var editGameType = splitMsgArray[3];
+		var editGameType = splitMsgArray[3];
 		getList('game', editGameType);
 		
 		// RING/TOUR
-		var editRingTourType = splitMsgArray[6];
+		var editRingTourType = splitMsgArray[4];
 		var editRingTourTypeOptions = document.getElementsByName('editRingTourRadio');
 		for(var i=0; i<editRingTourTypeOptions.length; i++){
 			if(editRingTourTypeOptions[i].value == editRingTourType){

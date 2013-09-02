@@ -193,17 +193,12 @@
             <div class="modalLabel">Place:</div>
         </div>
         <input id="editPlace" type="text" />
-        <!--
-        <input id="place" type="text" onkeypress="checkEnter(event, 'editSession');" />
-        -->
     </div>
     <!-------------------------------------->
-    <div class="modalRow">
-        <div class="modalLabelWrap">
-            <div class="modalLabel">Note:</div>
-        </div>
-        <textarea id="editNotes" rows="5" cols="38" maxlength="240"></textarea>
-    </div>
+	<div class="modalLabelWrap">
+		<div class="modalLabel">Note:</div>
+	</div>
+	<textarea id="editNotes" rows="5" cols="38" maxlength="240"></textarea>
     <!-------------------------------------->
     <div id='editSessErrLbl'></div><br>
     <button class="modalBtn" onclick="editSession();">Submit</button>

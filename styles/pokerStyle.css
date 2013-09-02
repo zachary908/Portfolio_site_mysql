@@ -6,6 +6,17 @@ body, html{
 	-webkit-backface-visibility: hidden;
 }
 
+textarea{
+	clear: both;
+}
+
+.floatingFix:after{
+	content: ".";
+	visibility: hidden;
+	display: block;
+	clear: both;
+}
+
 a{
 	text-decoration: none;
 	color: black;
@@ -109,13 +120,6 @@ a{
 }
 .fleft{
 	float: left;
-}
-
-.floatingFix:after{
-	content: ".";
-	visibility: hidden;
-	display: block;
-	clear: both;
 }
 
 #fullCover, #fullCover2{
