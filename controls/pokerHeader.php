@@ -64,15 +64,18 @@
 			</script>';
 	}
         
-	if(isset($_SESSION['user']['name'])){
-		echo '<script>
-			getUserIdOnName()
-			</script>';
-	}
-	
-	// if(isset($_SESSION['user']['id'])){
-		// echo $_SESSION['user']['id'];
+	// if(isset($_SESSION['user']['name'])){
+		// echo '<script>
+			// getUserIdOnName()
+			// </script>';
 	// }
+	
+	if(isset($_SESSION['user']['id'])){
+		echo $_SESSION['user']['id'];
+	}
+	else{
+		echo "User Id not set: ".$_SESSION['user']['id']." Username: ".$_SESSION['user']['name'];
+	}
 ?>
 	<div id="fullCover2"></div>
 	<form id="statusForm" action="../pokerSetStatus.php" method="POST" style="position: absolute">

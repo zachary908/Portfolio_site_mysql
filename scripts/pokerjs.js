@@ -821,7 +821,7 @@ function register(){
                                 $('#regErrLbl').html("Sorry, that Username is taken.");
                             }
                             else{
-                                alert("You are registered, " + $('#regUsername').val() + "! MESSAGE: " + message);
+                                alert("You are registered, " + $('#regUsername').val() + "!");
                                 hideModal('registerModal');
                                 window.location = 'pokerSummary.php';
                             }
@@ -849,16 +849,18 @@ function register(){
 }
 
 function login(){
+	$.post('pokerMethods.php', {method : 'logout'});
     $('#logErrLbl').html("");
     if($.trim($('#logUsername').val()) != "" && $.trim($('#logPasswd').val()) != ""){
         if(checkName($('#logUsername').val())){
             if(checkPwd($('#logPasswd').val())){
                 $.post('pokerMethods.php', {method: 'login', logUsername: $.trim($('#logUsername').val()), logPasswd: $.trim($('#logPasswd').val())}, function(message){
-                    if(message == '1'){
+                    if(message == 'NULL\n'){
                         $('#logErrLbl').html("That Username and/or Password is not registered.");
                     }
                     else{
-                        alert("Welcome, " + $('#logUsername').val() + "!");
+						var logUserName = $('#logUsername').val();
+                        alert("Welcome, " + logUserName + "!" + message);
                         hideModal('loginModal');
                         window.location = 'pokerSummary.php';
                     }
@@ -877,9 +879,9 @@ function login(){
     }
 }
 
-function getUserIdOnName(){
-    $.post('PokerMethods.php', {method : 'getUserIdOnName'});
-}
+// function getUserIdOnName(){
+    // $.post('PokerMethods.php', {method : 'getUserIdOnName'});
+// }
 
 function logout(){
 	$.post('pokerMethods.php', {method : 'logout'}, function(message){

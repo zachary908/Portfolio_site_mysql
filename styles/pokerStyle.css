@@ -242,6 +242,10 @@ a{
 	margin: auto;
 }
 
+td{
+	padding: 0px 5px;
+}
+
 th,
 td[name=place],
 td[name=live],
