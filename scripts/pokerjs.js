@@ -1557,7 +1557,9 @@ function getSessions(){
 
 function getSessionsAndSum(){
 	$.post('pokerMethods.php', {method: 'GetSessions'}, function (message){
-		if(message == 1){
+		// document.getElementById("output").innerHTML(message);
+		// });
+		if(message == ""){
 			$('#' + statusDiv).html("You have no recorded sessions. Add one now!");
 			document.getElementById(dataDiv).innerHTML = "";
 		}
@@ -1598,9 +1600,9 @@ function getSessionsAndSum(){
 				calc('duration', 'avg', 'sumTableBody', 'avgHrsTour');
 				calc('rate', 'avg', 'sumTableBody', 'avgRateTour');
 			fillTable();
-		}
 		showSumTbl('bySess');
 		fillTblSelect('tblSelect');
+		}
 	});
 }
 
