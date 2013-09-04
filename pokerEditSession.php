@@ -127,7 +127,7 @@
         <div class="modalLabelWrap">
             <div class="modalLabel">Location:</div>
         </div>
-        <select id="editLocationOptions" style="width:150px" onchange="showLocType('editSession','editLocTypeVal');"></select>
+        <select id="editLocationOptions" style="width:150px" onchange="showLocType('editLocTypeVal');"></select>
         <span onclick="showModal2('addLocationModal', 'addLocName');" style="cursor:pointer">Add Location</span>
     </div>
     <!-------------------------------------->
@@ -206,8 +206,8 @@
 
     <!-------------------------------------->
     <script>
-        $(document).ready(editGetVals('editSession'));
-        $(document).ready(showLocType('editSession'));
+        $(document).ready(editGetVals());
+        $(document).ready(showLocType());
     </script>
 
 <?php

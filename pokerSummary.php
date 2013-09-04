@@ -1,7 +1,8 @@
 <?php
     include 'controls/pokerHeader.php';
 ?>
-			
+
+    <!--<div id='output'>some output</div>-->
     <!-- THIS HIDDEN TABLE HOLDS ALL DATA FOR CURRENT USER -->
     <div id="sumData" style="position: absolute; visibility: hidden"></div>
 
@@ -32,7 +33,7 @@
         <div class="sumFilter floatingFix">
             <div class="fleft">
                 <div class="sumFilterLbl fleft">Select a category to see results...</div>
-                <select id="baseTbl" onchange="fillTblSelect(); showSumTbl('Summary', 'bySess');">
+                <select id="baseTbl" onchange="fillTblSelect(); showSumTbl('bySess');">
                     <option selected="true">Overall</option>
                     <option>Live</option>
                     <option>Online</option>
@@ -43,7 +44,7 @@
             <div class="fleft">
                 <div class="sumFilterLbl fleft" style="margin-left: 50px">Select up to 4 categories to compare...</div>
                 <select id="compareTbl" multiple class="multiSelect"></select>
-                <button onclick="showSumTbl('Summary');">GO</button>
+                <button onclick="showSumTbl();">GO</button>
             </div>
         </div>
     </div>
@@ -190,7 +191,7 @@
     </div><!-- END sumTblGraphWrap -->
 
     <script>
-        $(document).ready(getSessionsAndSum('Summary'));
+        $(document).ready(getSessionsAndSum());
         // $(document).ready(getUserIdOnName());
     </script>
 

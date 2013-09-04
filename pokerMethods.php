@@ -10,7 +10,7 @@
     try{
         $methodSwitch = $_REQUEST["method"];
 
-        switch($methodSwitch){
+        switch($methodSwitch){ 
             case 'test':
                 // GET VARS FROM POKERJS POST
                 $phpVal1 = $_POST['val1'];
