@@ -52,32 +52,32 @@
 
                 $mysqli->close();
                 break;
-            // case 'getUserIdOnName':
-                // // $_SESSION['USER']['ID'] IS SET IN THIS METHOD
-                // // GET VARS
-                // $Username = $_SESSION['user']['name'];
+            case 'getUserIdOnName':
+                // $_SESSION['USER']['ID'] IS SET IN THIS METHOD
+                // GET VARS
+                $Username = $_SESSION['user']['name'];
 
-                // // CONNECT TO DB
-                // $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
-                // if($mysqli->connect_errno){
-                    // echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
-                // }
+                // CONNECT TO DB
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
+                }
                 
-                // $strQuery = "SELECT Id FROM members WHERE Username = '".$Username."';";
-                // if(!$mysqli->multi_query($strQuery)){
-                    // echo "Query failed: (".$mysqli->errno.") ".$mysqli->error;
-                // }
+                $strQuery = "SELECT Id FROM members WHERE Username = '".$Username."';";
+                if(!$mysqli->multi_query($strQuery)){
+                    echo "Query failed: (".$mysqli->errno.") ".$mysqli->error;
+                }
                 
-                // $res = $mysqli->store_result();
-                // $row = $res->fetch_assoc();
+                $res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
                 
-                // // SET $_SESSION['user']['id'] BASED ON $_SESSION['user']['name']
-                // $_SESSION['user']['id'] = $row['Id'];
-				// echo $row['Id'];
-                // $res->free();
+                // SET $_SESSION['user']['id'] BASED ON $_SESSION['user']['name']
+                $_SESSION['user']['id'] = $row['Id'];
+				echo $row['Id'];
+                $res->free();
                 
-                // $mysqli->close();
-                // break;
+                $mysqli->close();
+                break;
                 
             case 'register':
                 // CONNECT TO DB
@@ -429,9 +429,14 @@
                 if($mysqli->connect_errno){
                     echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
                 }
-
-                $MemberId = $_SESSION['user']['id'];
-                $GetSessionsMsg = 0;
+				
+				if(isset($_SESSION['user']['id'])){
+					$MemberId = $_SESSION['user']['id'];
+					$GetSessionsMsg = 0;
+				}
+				else{
+					echo "user id not set for get sess";
+				}
 
 				$strQuery = "CALL GetSessions('".$MemberId."', @GetSessionsMsg);";
 				
