@@ -29,54 +29,13 @@
 		ga('create', 'UA-43676050-1', 'zacharybriancox.com');
 		ga('send', 'pageview');
 	</script>
+	
 </head>
 
 <body>
-<?php
-	if(basename($_SERVER['PHP_SELF']) == "pokerAddSession.php"){
-		echo '<script>
-			locListDest = "locationOptions";
-			locTypeDest = "locTypeVal";
-			gameListDest = "gameOptions";
-			limitListDest = "limitOptions";
-			</script>';
-	}
-	else if(basename($_SERVER['PHP_SELF']) == "pokerEditSession.php"){
-		echo '<script>
-			locListDest = "editLocationOptions";
-			locTypeDest = "editLocTypeVal";
-			gameListDest = "editGameOptions";
-			limitListDest = "editLimitOptions";
-			</script>';
-	}
-	else if(basename($_SERVER['PHP_SELF']) == "pokerSessions.php"){
-		echo '<script>
-			statusDiv = "sessStatus";
-			dataDiv = "sessData";
-			tblBodyName = "sessTableBody";
-			</script>';
-	}
-	else if(basename($_SERVER['PHP_SELF']) == "pokerSummary.php"){
-		echo '<script>
-			statusDiv = "sumStatus";
-			dataDiv = "sumData";
-			tblBodyName = "sumTableBody";
-			</script>';
-	}
-        
-	// if(isset($_SESSION['user']['name'])){
-		// echo '<script>
-			// getUserIdOnName()
-			// </script>';
-	// }
-	
-	if(isset($_SESSION['user']['id'])){
-		echo $_SESSION['user']['id'];
-	}
-	else{
-		echo "User Id not set: ".$_SESSION['user']['id']." Username: ".$_SESSION['user']['name'];
-	}
-?>
+	<?php
+		var_dump($_SESSION);
+	?>
 	<div id="fullCover2"></div>
 	<form id="statusForm" action="../pokerSetStatus.php" method="POST" style="position: absolute">
 		<input id="status" name="status" type="hidden" value="" />

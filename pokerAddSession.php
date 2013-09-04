@@ -121,7 +121,7 @@
         <div class="modalLabelWrap">
             <div class="modalLabel">Location:</div>
         </div>
-        <select id="locationOptions" style="width:150px" onchange="showLocType();"></select>
+        <select id="locationOptions" style="width:150px" onchange="showLocType('AddSession');"></select>
         <script>getLocList()</script>
 
         <span onclick="showModal2('addLocationModal', 'addLocName');" style="cursor:pointer">Add Location</span>
@@ -132,7 +132,7 @@
             <div class="modalLabel">Location Type:</div>
         </div>
         <script>$(document).ready(function(){
-            showLocType();
+            showLocType('AddSession');
             });
         </script>
 

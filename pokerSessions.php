@@ -17,7 +17,7 @@
     <div class="filterWrap">
         <div class="sessFilter floatingFix">
             <div class="fleft">
-                <div id="filter" onkeypress="checkEnter(event, applyFilter($('#category').val()), $('#operator').val());">
+                <div id="filter" onkeypress="checkEnter(event, applyFilter('Sessions', $('#category').val()), $('#operator').val());">
                     <div>Select a category to filter...</div>
                     <select id="category" onchange="fillOperator(); fillFilterVal();">
                         <option value="start">Start Time</option>
@@ -35,8 +35,8 @@
                     </select>
                     <select id="operator" onchange="fillFilterVal();"></select>
                     <span id="filterVal"></span>
-                    <button type="button" onclick="applyFilter($('#category').val(), $('#operator').val(), $('#filterInput1').val(), $('#filterInput2').val());">Apply Filter</button>
-                    <button type="button" onclick="fillTable(); fillOperator(); fillFilterVal();">Clear Filter</button>
+                    <button type="button" onclick="applyFilter('Sessions', $('#category').val(), $('#operator').val(), $('#filterInput1').val(), $('#filterInput2').val());">Apply Filter</button>
+                    <button type="button" onclick="fillTable('Sessions'); fillOperator(); fillFilterVal();">Clear Filter</button>
                     <div id="filterErrLbl"></div><br>
                 </div>
             </div>
@@ -79,7 +79,7 @@
     </table>
     <button type="button" onclick="parent.location='pokerAddSession.php';">Add Session</button>
     <script>
-        $(document).ready(getSessions());
+        $(document).ready(getSessions('Sessions'));
         $(document).ready(fillOperator());
         $(document).ready(fillFilterVal());
     </script>

@@ -1,6 +1,38 @@
 // GENERAL-PURPOSE FUNCTIONS
 // ----------------------------------------
 
+	// var tblBodyName = "";
+	// var dataDiv = "";
+	// var statusDiv = "";
+	// var locTypeDest = "";
+	// var locListDest = "";
+	// var gameListDest = "";
+	// var limitListDest = "";
+	
+	// if(page == "addSession"){
+		// locListDest = "locationOptions";
+		// locTypeDest = "locTypeVal";
+		// gameListDest = "gameOptions";
+		// limitListDest = "limitOptions";
+			
+	// }
+	// else if(page == "editSession"){
+		// locListDest = "editLocationOptions";
+		// locTypeDest = "editLocTypeVal";
+		// gameListDest = "editGameOptions";
+		// limitListDest = "editLimitOptions";
+	// }
+	// else if(page == "Sessions"){
+		// statusDiv = "sessStatus";
+		// dataDiv = "sessData";
+		// tblBodyName = "sessTableBody";
+	// }
+	// else if(page == "Summary"){
+		// statusDiv = "sumStatus";
+		// dataDiv = "sumData";
+		// tblBodyName = "sumTableBody";
+	// }
+
 function test(){
     // USE THIS FXN TO TEST PHP 'TEST' FXN
     // SET PHP VARIABLE VALUES HERE
@@ -191,7 +223,20 @@ function fillTblSelect(){
 	}
 }
 
-function calcData(oper, cat){
+function calcData(page, oper, cat){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
 	var colNum;
 	switch(cat){
 		case "sessNum":
@@ -332,7 +377,38 @@ function calcData(oper, cat){
 	// }
 }
 
-function showSumTbl(byX){
+function showSumTbl(page, byX){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	var locTypeDest = "";
+	var locListDest = "";
+	var gameListDest = "";
+	var limitListDest = "";
+	
+	if(page == "addSession"){
+		locListDest = "locationOptions";
+		locTypeDest = "locTypeVal";
+		gameListDest = "gameOptions";
+		limitListDest = "limitOptions";
+	}
+	else if(page == "editSession"){
+		locListDest = "editLocationOptions";
+		locTypeDest = "editLocTypeVal";
+		gameListDest = "editGameOptions";
+		limitListDest = "editLimitOptions";
+	}
+	else if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
+	
 	// byX IS THE XAXIS TYPE (EG: byDate, bySession, byWeek, byMon, byLoc, byDayOfWk...)
 	
 	// PUT COMPARETBL SELECTION(S) AND BASETBL SELECTION INTO ARRAY
@@ -371,35 +447,35 @@ function showSumTbl(byX){
 		var tblSelect = tblSelArr[i];
 		switch(tblSelect){
 			case "Overall":
-				fillTable();
+				fillTable(page);
 				totTblId = "totals";
 				avgTblId = "avgs";
 				lineColors[i] = 'green';
 				break;
 			case "Live":
-				fillTable();
-				applyFilter('live', 'IS', 'Live');
+				fillTable(page);
+				applyFilter(page, 'live', 'IS', 'Live');
 				totTblId = "totalsLive";
 				avgTblId = "avgsLive";
 				lineColors[i] = 'blue';
 				break;
 			case "Online":
-				fillTable();
-				applyFilter('live', 'IS', 'Online');
+				fillTable(page);
+				applyFilter(page, 'live', 'IS', 'Online');
 				totTblId = "totalsOnline";
 				avgTblId = "avgsOnline";
 				lineColors[i] = 'red';
 				break;
 			case "Cash":
-				fillTable();
-				applyFilter('ringTour', 'IS', 'Ring');
+				fillTable(page);
+				applyFilter(page, 'ringTour', 'IS', 'Ring');
 				totTblId = "totalsCash";
 				avgTblId = "avgsCash";
 				lineColors[i] = 'orange';
 				break;
 			case "Tournament":
-				fillTable();
-				applyFilter('ringTour', 'IS', 'Tour');
+				fillTable(page);
+				applyFilter(page, 'ringTour', 'IS', 'Tour');
 				totTblId = "totalsTourney";
 				avgTblId = "avgsTourney";
 				lineColors[i] = 'purple';
@@ -418,16 +494,16 @@ function showSumTbl(byX){
 		
 		switch(byX){
 			case 'bySess':
-				totDataX = calcData('report', 'sessNum');			
-				totDataY = calcData('runSum', 'return');
-				avgDataX = calcData('report', 'sessNum');			
-				avgDataY = calcData('runAvg', 'return');
+				totDataX = calcData(page, 'report', 'sessNum');			
+				totDataY = calcData(page, 'runSum', 'return');
+				avgDataX = calcData(page, 'report', 'sessNum');			
+				avgDataY = calcData(page, 'runAvg', 'return');
 				break;
 			case 'byDate':
-				totDataX = calcData('report', 'start');			
-				totDataY = calcData('runSum', 'return');
-				avgDataX = calcData('report', 'start');			
-				avgDataY = calcData('runAvg', 'return');
+				totDataX = calcData(page, 'report', 'start');			
+				totDataY = calcData(page, 'runSum', 'return');
+				avgDataX = calcData(page, 'report', 'start');			
+				avgDataY = calcData(page, 'runAvg', 'return');
 				break;
 		
 		}
@@ -705,7 +781,26 @@ function tblToRGraphDate(tblDate){
 	return RGraphDateTime = tblDateYYYY + "/" + tblDateMM + "/" + tblDateDD + " " + tbl24Hour + ":" + tblMin + ":00";
 }
 		
-function showLocType(){
+function showLocType(page){
+	var locTypeDest = "";
+	var locListDest = "";
+	var gameListDest = "";
+	var limitListDest = "";
+	
+	if(page == "addSession"){
+		locListDest = "locationOptions";
+		locTypeDest = "locTypeVal";
+		gameListDest = "gameOptions";
+		limitListDest = "limitOptions";
+			
+	}
+	else if(page == "editSession"){
+		locListDest = "editLocationOptions";
+		locTypeDest = "editLocTypeVal";
+		gameListDest = "editGameOptions";
+		limitListDest = "editLimitOptions";
+	}
+	
 	var x = document.getElementsByName("locType");
 	var y = document.getElementsByName("location");
 	var targetVal = $("#" + locListDest).val();
@@ -859,8 +954,7 @@ function login(){
                         $('#logErrLbl').html("That Username and/or Password is not registered.");
                     }
                     else{
-						var logUserName = $('#logUsername').val();
-                        alert("Welcome, " + logUserName + "!" + message);
+                        alert("Welcome, " + $('#logUsername').val() + "!" + message);
                         hideModal('loginModal');
                         window.location = 'pokerSummary.php';
                     }
@@ -1082,7 +1176,7 @@ function addLocOption(){
 	}
 }
 
-function getLocList(newOptionVal){
+function getLocList(page, newOptionVal){
 	$('#addSessErrLbl').html("");
 	if (window.XMLHttpRequest){
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -1123,7 +1217,7 @@ function getLocList(newOptionVal){
 	}
 	document.getElementById(locListDest).innerHTML = string1;
 	
-	showLocType();
+	showLocType(page);
 }
 
 function addSession(){
@@ -1540,7 +1634,22 @@ function deleteRow(x){
 	xmlhttp.send("method=deleteSessionAJAX&delSessId=" + rowId);	
 }
 
-function getSessions(){
+function getSessions(page){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	
+	if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
+	
 	$.post('pokerMethods.php', {method: 'GetSessions'}, function (message){
 		if(message == 1){
 			$('#' + statusDiv).html("You have no recorded sessions. Add one now!");
@@ -1548,14 +1657,28 @@ function getSessions(){
 		}
 		else{
 			document.getElementById(dataDiv).innerHTML = message;
-			fillTable();
+			fillTable(page);
 			//calc('return', 'sum', 'sumTableBody', 'totEarn');
 		}
 		
 	});
 }
 
-function getSessionsAndSum(){
+function getSessionsAndSum(page){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	
+	if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
 	$.post('pokerMethods.php', {method: 'GetSessions'}, function (message){
 		if(message == 1){
 			$('#' + statusDiv).html("You have no recorded sessions. Add one now!");
@@ -1563,48 +1686,62 @@ function getSessionsAndSum(){
 		}
 		else{
 			document.getElementById(dataDiv).innerHTML = message;
-			fillTable();
+			fillTable(page);
 			// GET DEFAULT SUMMARY VALS
 			calc('return', 'sum', 'sumTableBody', 'totEarn');
 			calc('return', 'avg', 'sumTableBody', 'avgEarn');
 			calc('duration', 'sum', 'sumTableBody', 'totHrs');
 			calc('duration', 'avg', 'sumTableBody', 'avgHrs');
 			calc('rate', 'avg', 'sumTableBody', 'avgRate');
-			applyFilter('live', 'IS', 'Live'); 
+			applyFilter(page, 'live', 'IS', 'Live'); 
 				calc('return', 'sum', 'sumTableBody', 'totEarnLive');
 				calc('return', 'avg', 'sumTableBody', 'avgEarnLive'); 
 				calc('duration', 'sum', 'sumTableBody', 'totHrsLive');
 				calc('duration', 'avg', 'sumTableBody', 'avgHrsLive');
 				calc('rate', 'avg', 'sumTableBody', 'avgRateLive');
-			fillTable();
-			applyFilter('live', 'IS', 'Online');
+			fillTable(page);
+			applyFilter(page, 'live', 'IS', 'Online');
 				calc('return', 'sum', 'sumTableBody', 'totEarnOnline');
 				calc('return', 'avg', 'sumTableBody', 'avgEarnOnline');
 				calc('duration', 'sum', 'sumTableBody', 'totHrsOnline');
 				calc('duration', 'avg', 'sumTableBody', 'avgHrsOnline');
 				calc('rate', 'avg', 'sumTableBody', 'avgRateOnline');
-			fillTable();
-			applyFilter('ringTour', 'IS', 'Ring');
+			fillTable(page);
+			applyFilter(page, 'ringTour', 'IS', 'Ring');
 				calc('return', 'sum', 'sumTableBody', 'totEarnCash');
 				calc('return', 'avg', 'sumTableBody', 'avgEarnCash');
 				calc('duration', 'sum', 'sumTableBody', 'totHrsCash');
 				calc('duration', 'avg', 'sumTableBody', 'avgHrsCash');
 				calc('rate', 'avg', 'sumTableBody', 'avgRateCash');
-			fillTable();
-			applyFilter('ringTour', 'IS', 'Tournament');
+			fillTable(page);
+			applyFilter(page, 'ringTour', 'IS', 'Tournament');
 				calc('return', 'sum', 'sumTableBody', 'totEarnTour');
 				calc('return', 'avg', 'sumTableBody', 'avgEarnTour');
 				calc('duration', 'sum', 'sumTableBody', 'totHrsTour');
 				calc('duration', 'avg', 'sumTableBody', 'avgHrsTour');
 				calc('rate', 'avg', 'sumTableBody', 'avgRateTour');
-			fillTable();
+			fillTable(page);
 		}
-		showSumTbl('bySess');
+		showSumTbl(page, 'bySess');
 		fillTblSelect('tblSelect');
 	});
 }
 
-function fillTable(){
+function fillTable(page){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	
+	if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
 	// ALL THE FOLLOWING MUST BE IN SEPARATE FXN, 
 	// OTHERWISE, CALL WILL BE MADE TO DB EVERY TIME FILTER IS APPLIED
 	var dataStr = document.getElementById(dataDiv).innerHTML;
@@ -1856,7 +1993,20 @@ function fillFilterVal(){
 	
 }
 
-function applyFilter(cat, oper, filVal1, filVal2){
+function applyFilter(page, cat, oper, filVal1, filVal2){
+	var tblBodyName = "";
+	var dataDiv = "";
+	var statusDiv = "";
+	if(page == "Sessions"){
+		statusDiv = "sessStatus";
+		dataDiv = "sessData";
+		tblBodyName = "sessTableBody";
+	}
+	else if(page == "Summary"){
+		statusDiv = "sumStatus";
+		dataDiv = "sumData";
+		tblBodyName = "sumTableBody";
+	}
 	// start = 1;
 	// location = 2;
 	// gameType = 3;
@@ -2188,7 +2338,7 @@ function calc(cat, oper, srcBody, retRow){
 
 }
 
-function editGetVals(){
+function editGetVals(page){
 	$.post('pokerMethods.php', {method: 'editGetVals'}, function(message){
 		// RETURN DB VARS AS STRING, THEN PARSE INTO ARRAY
 		var splitRegEx = /#/g;
@@ -2306,7 +2456,7 @@ function editGetVals(){
 		getLocList(editLocation);
 		
 		//LOCATION TYPE
-		showLocType();
+		showLocType(page);
 			
 		// GAME TYPE
 		var editGameType = splitMsgArray[3];
