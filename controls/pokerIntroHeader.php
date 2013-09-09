@@ -90,6 +90,9 @@
 					<div class="modalLabel">Password:</div>
 				</div>
 				<input id="logPasswd" type="password" onkeypress="checkEnter(event, 'login');">
+				<div>
+					<span onclick="hideModal('loginModal'); showModal('forgotModal', 'forgotPwdEmail')" style="font-style: italic; cursor: pointer">Forgot password?</span>
+				</div>
 			</div>
 			<div id="logErrLbl"></div><br>
 			<div class="modalBtnWrap">
@@ -98,6 +101,25 @@
 			</div>
 		</div>
 		<!-- END loginModal -->
+		
+		<!-- forgotModal -->
+		<div class="modalGlobal" id="forgotModal">
+			<div class="modalHeaderWrap">
+				<div class="modalHeader">Forgot Password</div>
+			</div>
+			<div class="modalRow">
+				<div class="modalLabelWrap">
+					<div class="modalLabel">Email:</div>
+				</div>
+				<input id="forgotPwdEmail" type="text" onkeypress="checkEnter(event, 'forgotPassword');">
+			</div>
+			<div id="forgotPwdErrLbl"></div><br>
+			<div class="modalBtnWrap">
+				<button class="modalBtn" onclick="forgotPassword()">Submit</button>
+				<button class="modalBtn" onclick="clrCloseModal('forgotModal')">Cancel</button>
+			</div>
+		</div>
+		<!-- END forgotModal -->
 		
 	</div><!-- END modalWrap -->
 	<div class="headerBkgd">

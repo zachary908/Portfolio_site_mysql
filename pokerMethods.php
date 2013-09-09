@@ -147,11 +147,49 @@
 					$_SESSION['user']['id']= $row['Id'];
                 }
 
-                var_dump($row);
+                var_dump($_SESSION);
                 
                 $mysqli->close();
                 break;
+			
+			case 'forgotPassword':
+				// CONNECT TO DB
+                $mysqli = new mysqli($myServer, $myUser, $myPwd, $myDb);
 
+                if($mysqli->connect_errno){
+                    echo "Failed to connect to MySQL: (".$mysqli->connect_errno.") ".$mysqli->connect_error;
+                }
+				
+				// GET THE USER'S EMAIL ADDRESS AND ENCRYPT IT
+				$email = $_POST['email'];
+				$encEmail = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($encryptKey), $email, MCRYPT_MODE_CBC, md5(md5($encryptKey))));
+				
+				// GENERATE A RANDOM TOKEN
+				$bytesToken = openssl_random_pseudo_bytes(4);
+				$passwordToken = bin2hex($bytesToken);
+				$forgotMsg = 0;
+				
+				// INSERT TOKEN INTO DB
+				$strQuery =	"CALL InputPwdToken('".$encEmail."', '".$passwordToken."', @forgotMsg);";
+				
+				if (!$mysqli->multi_query($strQuery)) {
+					echo "CALL failed: (".$mysqli->errno.") ".$mysqli->error;
+				}
+				
+				$res = $mysqli->store_result();
+                $row = $res->fetch_assoc();
+                $forgotMsg = $row['forgotMsg'];
+
+                if($forgotMsg == 0){
+                    echo "That email is not in our database.";
+                }
+				else{
+					echo "Check your email for a link to reset your password!";
+				}
+				
+				$mysqli->close();
+                break;
+			
             case 'logout':
                 session_destroy();
                 break;

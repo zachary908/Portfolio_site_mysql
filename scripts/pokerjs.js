@@ -861,6 +861,7 @@ function login(){
                     }
                     else{
 						var logUserName = $('#logUsername').val();
+						getUserIdOnName();
                         alert("Welcome, " + logUserName + "!" + message);
                         hideModal('loginModal');
                         window.location = 'pokerSummary.php';
@@ -878,6 +879,14 @@ function login(){
     else{
     $('#logErrLbl').html("Please complete all fields.");
     }
+}
+
+function forgotPassword(){
+	var emailEntry = $('#forgotPwdEmail').val();
+	$.post('PokerMethods.php', {method : 'forgotPassword', email : emailEntry}, function(message){
+		alert(message);
+		clrCloseModal('forgotModal');
+	});
 }
 
 function getUserIdOnName(){
