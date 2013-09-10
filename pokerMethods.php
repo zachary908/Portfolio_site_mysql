@@ -185,6 +185,21 @@
                 }
 				else{
 					echo "Check your email for a link to reset your password!";
+					
+					//Send an email to the user with a link that includes the encrypted password token and the user's ID in the query string					
+					$url = '<a href="http://zacharybriancox.com/pokerRequestNewPwd.php?a='.$email.'&b='.$passwordToken.'">http://videointerviewpractice.com/RequestNewPwd.php?a='.$email.'&b='.$passwordToken.'</a>';
+					
+					$emailBody = "Hi! <br/><br/>You've received this email because you've requested a new password.<br/><br/> Just follow the link below to reset your password:<br/>".$url;
+					
+					$to = strtolower($email);
+					//$nameto = strtolower($email);
+					//$from = "support@zacharybriancox.com";
+					//$namefrom = "zacharybriancox.com Support";
+					$subject = "Password Reset";
+					$message = $emailBody;
+					//$test = mail($from, $namefrom, $to, $nameto, $subject, $message);
+					$headers = 'From: webmaster@zacharybriancox.com' . "\r\n";
+					$test = mail($to, $subject, $message, $headers);
 				}
 				
 				$mysqli->close();
